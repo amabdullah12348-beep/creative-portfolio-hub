@@ -119,15 +119,16 @@ export const Navbar: React.FC<NavbarProps> = ({ currentPage, onNavigate, onOpenI
             {/* Admin entry link */}
             <button
               onClick={() => handleNavClick('admin')}
-              className={`p-2 text-xs rounded-lg border transition-colors ${
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-semibold rounded-lg border transition-colors whitespace-nowrap shrink-0 ${
                 isAdmin
-                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 hover:bg-amber-500/30'
-                  : 'text-slate-400 hover:text-slate-200 border-slate-800 hover:border-slate-700 bg-slate-900/50'
+                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/40 hover:bg-amber-500/30 shadow-sm'
+                  : 'text-slate-300 hover:text-white border-slate-700/80 hover:border-amber-500/50 bg-slate-900/80 hover:bg-slate-800'
               }`}
-              title={isAdmin ? 'Admin Dashboard (Active)' : 'Admin Login'}
-              aria-label="Admin Portal"
+              title="Admin CMS Portal (/admin)"
+              aria-label="Admin CMS Portal"
             >
-              <Lock className="w-3.5 h-3.5" />
+              <Lock className="w-3.5 h-3.5 text-amber-400" />
+              <span>{isAdmin ? 'CMS Dashboard' : 'Admin CMS'}</span>
             </button>
 
             {/* Primary Action Button */}

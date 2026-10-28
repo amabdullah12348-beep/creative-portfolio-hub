@@ -13,12 +13,12 @@ import {
   ThemeSettings,
   Inquiry,
   MediaAsset,
-  DatabaseState,
 } from '../../types/index.ts';
 import { api } from '../../services/api.ts';
 import { useAuth } from '../../context/AuthContext.tsx';
 import { useLanguage } from '../../context/LanguageContext.tsx';
 import { useTheme } from '../../context/ThemeContext.tsx';
+import { ImageUploadField } from '../../components/ImageUploadField.tsx';
 import {
   LayoutDashboard,
   User,
@@ -35,7 +35,6 @@ import {
   LogOut,
   Plus,
   Trash2,
-  Edit2,
   Save,
   RotateCcw,
   Check,
@@ -47,6 +46,8 @@ import {
   Download,
   Copy,
   ExternalLink,
+  Sparkles,
+  Zap,
 } from 'lucide-react';
 
 interface AdminDashboardProps {
@@ -58,25 +59,25 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   initialProfile,
   onNavigateHome,
 }) => {
-  const { isAdmin, login, logout, isLoading: authLoading } = useAuth();
+  const { isAdmin, login, logout } = useAuth();
   const { theme, updateTheme, resetTheme } = useTheme();
   const { ui, lang } = useLanguage();
 
   // Auth state
-  const [loginPassword, setLoginPassword] = useState('');
+  const [loginPassword, setLoginPassword] = useState('admin123');
   const [loginError, setLoginError] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   // Active Tab
   type TabKey =
+    | 'quick-edit'
     | 'overview'
     | 'profile'
     | 'education'
+    | 'calligraphy'
     | 'design'
     | 'video'
     | 'marketing'
-    | 'testimonials'
-    | 'calligraphy'
     | 'links'
     | 'theme'
     | 'inquiries'
@@ -84,7 +85,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     | 'backup'
     | 'security';
 
-  const [activeTab, setActiveTab] = useState<TabKey>('overview');
+  const [activeTab, setActiveTab] = useState<TabKey>('quick-edit');
 
   // Content States
   const [profile, setProfile] = useState<Profile>(initialProfile);
@@ -104,9 +105,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [newPassword, setNewPassword] = useState('');
   const [passwordStatus, setPasswordStatus] = useState<string | null>(null);
-
-  // File upload state
-  const [uploading, setUploading] = useState(false);
 
   // Load all data when authenticated
   const loadDashboardData = async () => {
@@ -191,9 +189,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     try {
       const updated = await api.updateProfile(profile);
       setProfile(updated);
-      showSuccess('Profile updated successfully');
+      showSuccess('Profile & Images saved to live database!');
     } catch (err: any) {
       showError(err.message || 'Failed to save profile');
+    }
+  };
+
+  // --- Quick-Edit: Save All Core Text & Images ---
+  const handleSaveAllQuickEdit = async () => {
+    try {
+      await api.updateProfile(profile);
+      // save calligraphy
+      for (const art of calligraphy.slice(0, 3)) {
+        await api.updateCalligraphy(art.id, art);
+      }
+      // save design
+      for (const des of designProjects.slice(0, 3)) {
+        await api.updateDesignProject(des.id, des);
+      }
+      showSuccess('All text and images saved successfully!');
+    } catch (err: any) {
+      showError(err.message || 'Error saving changes');
     }
   };
 
@@ -235,8 +251,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       title: { bn: 'নতুন ডিজাইন প্রজেক্ট', en: 'New Design Project', ar: 'مشروع تصميم جديد', ur: 'نیا ڈیزائن پروجیکٹ' },
       category: 'Logo & Branding',
       description: { bn: 'প্রজেক্টের বিবরণ...', en: 'Project description...', ar: 'وصف المشروع...', ur: 'پروجیکٹ کی تفصیل...' },
-      thumbnail: '/src/assets/images/branding_identity_showcase_1793194734888.jpg',
-      images: ['/src/assets/images/branding_identity_showcase_1793194734888.jpg'],
+      thumbnail: profile.avatarUrl || '/src/assets/images/branding_identity_showcase_1793194734888.jpg',
+      images: [profile.avatarUrl || '/src/assets/images/branding_identity_showcase_1793194734888.jpg'],
       tags: ['Branding', 'Design'],
       client: 'New Client',
       completionDate: '2026',
@@ -338,38 +354,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     }
   };
 
-  // --- Media upload handler ---
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (file.size > 10 * 1024 * 1024) {
-      showError('File size exceeds 10MB limit');
-      return;
-    }
-
-    setUploading(true);
-    const reader = new FileReader();
-    reader.onload = async () => {
-      try {
-        const base64 = reader.result as string;
-        const uploaded = await api.uploadMedia({
-          fileName: file.name,
-          fileData: base64,
-          mimeType: file.type,
-          altText: file.name,
-        });
-        setMedia([uploaded, ...media]);
-        showSuccess('File uploaded and saved to disk successfully');
-      } catch (err: any) {
-        showError(err.message || 'File upload failed');
-      } finally {
-        setUploading(false);
-      }
-    };
-    reader.readAsDataURL(file);
-  };
-
   // --- Database Export / Import ---
   const handleExportJson = async () => {
     try {
@@ -435,11 +419,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <Lock className="w-6 h-6" />
             </div>
             <h1 className="text-2xl font-bold font-display text-white">
-              Administrator CMS Portal
+              CMS Admin Dashboard
             </h1>
             <p className="text-xs text-slate-400">
-              Enter your master password to manage content, themes, inquiries, and database records.
+              Password-protected content management system. Edit text, photos, and projects directly from your browser.
             </p>
+          </div>
+
+          <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs flex items-center justify-between">
+            <span>Default Password: <strong className="font-mono text-white">admin123</strong></span>
+            <button
+              type="button"
+              onClick={() => setLoginPassword('admin123')}
+              className="text-[11px] underline text-amber-400 hover:text-amber-200"
+            >
+              Fill Password
+            </button>
           </div>
 
           {loginError && (
@@ -459,7 +454,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 required
                 value={loginPassword}
                 onChange={(e) => setLoginPassword(e.target.value)}
-                placeholder="Enter password (default: admin123)"
+                placeholder="Enter admin password"
                 className="w-full px-3.5 py-2.5 text-sm bg-slate-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-amber-400"
               />
             </div>
@@ -488,19 +483,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   // Navigation tabs config
   const navTabs: { id: TabKey; label: string; icon: React.FC<{ className?: string }> }[] = [
-    { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-    { id: 'profile', label: 'Profile & Credentials', icon: User },
-    { id: 'education', label: 'Education & Training', icon: Award },
+    { id: 'quick-edit', label: '⚡ Quick Edit Text & Images', icon: Zap },
+    { id: 'profile', label: 'Profile & Photos', icon: User },
     { id: 'calligraphy', label: 'Arabic Calligraphy', icon: Feather },
     { id: 'design', label: 'Graphic Design', icon: Palette },
     { id: 'video', label: 'Video Projects', icon: Video },
     { id: 'marketing', label: 'Meta Marketing', icon: TrendingUp },
     { id: 'links', label: 'All Links & Social', icon: LinkIcon },
+    { id: 'education', label: 'Education & Credentials', icon: Award },
     { id: 'theme', label: 'Visual Customizer', icon: Sliders },
     { id: 'inquiries', label: `Inquiries (${inquiries.filter((i) => !i.read).length})`, icon: Inbox },
     { id: 'media', label: 'Media Assets', icon: FolderOpen },
     { id: 'backup', label: 'Export & Supabase', icon: Database },
     { id: 'security', label: 'Password & Security', icon: Lock },
+    { id: 'overview', label: 'System Overview', icon: LayoutDashboard },
   ];
 
   return (
@@ -513,10 +509,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           </div>
           <div>
             <h1 className="text-lg font-bold font-display text-white">
-              Portfolio &amp; CMS Management Studio
+              CMS Dashboard &amp; Direct Editor
             </h1>
             <p className="text-xs text-slate-400">
-              Live database connected · All changes persist to disk and cloud
+              Logged in as Administrator · Edit any text or image directly from your browser
             </p>
           </div>
         </div>
@@ -542,14 +538,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
       {/* Status Toasts */}
       {saveStatus && (
-        <div className="p-3 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2 animate-fade-in">
-          <Check className="w-4 h-4" />
-          <span>{saveStatus}</span>
+        <div className="p-3.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2 animate-fade-in shadow-lg">
+          <Check className="w-4 h-4 shrink-0" />
+          <span className="font-semibold">{saveStatus}</span>
         </div>
       )}
       {errorMessage && (
-        <div className="p-3 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2 animate-fade-in">
-          <AlertCircle className="w-4 h-4" />
+        <div className="p-3.5 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2 animate-fade-in shadow-lg">
+          <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{errorMessage}</span>
         </div>
       )}
@@ -579,66 +575,241 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
         {/* Tab Content Panel */}
         <div className="lg:col-span-9 bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-800 shadow-xl space-y-8">
-          {/* TAB 1: OVERVIEW */}
-          {activeTab === 'overview' && (
-            <div className="space-y-6">
-              <h2 className="text-xl font-bold font-display text-white">
-                Dashboard Overview &amp; Content Summary
-              </h2>
+          {/* TAB 0: QUICK EDIT TEXT & IMAGES */}
+          {activeTab === 'quick-edit' && (
+            <div className="space-y-8">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800 pb-4">
+                <div>
+                  <div className="flex items-center gap-2 text-xs font-semibold text-amber-400 uppercase tracking-wider mb-1">
+                    <Zap className="w-3.5 h-3.5" />
+                    <span>Instant Direct Editing</span>
+                  </div>
+                  <h2 className="text-xl font-bold font-display text-white">
+                    Quick Edit Text &amp; Images
+                  </h2>
+                  <p className="text-xs text-slate-400">
+                    Replace photos, change your name, title, bio, or projects right here. Changes save to the live database immediately.
+                  </p>
+                </div>
+                <button
+                  onClick={handleSaveAllQuickEdit}
+                  className="px-5 py-2.5 text-xs font-semibold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-xl flex items-center gap-2 transition-all shadow-md self-start sm:self-auto shrink-0"
+                >
+                  <Save className="w-4 h-4" />
+                  <span>Save All Changes</span>
+                </button>
+              </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800">
-                  <span className="text-xs text-slate-400 block">Calligraphy Works</span>
-                  <span className="text-2xl font-bold font-display text-white mt-1 block">
-                    {calligraphy.length}
-                  </span>
-                </div>
-                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800">
-                  <span className="text-xs text-slate-400 block">Graphic Design</span>
-                  <span className="text-2xl font-bold font-display text-white mt-1 block">
-                    {designProjects.length}
-                  </span>
-                </div>
-                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800">
-                  <span className="text-xs text-slate-400 block">Video Projects</span>
-                  <span className="text-2xl font-bold font-display text-white mt-1 block">
-                    {videoProjects.length}
-                  </span>
-                </div>
-                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800">
-                  <span className="text-xs text-slate-400 block">Unread Inquiries</span>
-                  <span className="text-2xl font-bold font-display text-amber-400 mt-1 block">
-                    {inquiries.filter((i) => !i.read).length}
-                  </span>
+              {/* 1. Main Profile Photos */}
+              <div className="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-5">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <User className="w-4 h-4 text-amber-400" />
+                  <span>1. Main Profile Photo &amp; Site Logo</span>
+                </h3>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <ImageUploadField
+                    label="Profile Photo / Portrait"
+                    value={profile.avatarUrl}
+                    onChange={(url) => setProfile({ ...profile, avatarUrl: url })}
+                    mediaAssets={media}
+                    aspectRatio="square"
+                    helpText="Shows in the Hero section, About page, and Link Hub."
+                  />
+
+                  <ImageUploadField
+                    label="Site Logo / Arabic Monogram"
+                    value={profile.logoUrl}
+                    onChange={(url) => setProfile({ ...profile, logoUrl: url })}
+                    mediaAssets={media}
+                    aspectRatio="square"
+                    helpText="Used for website branding and headers."
+                  />
                 </div>
               </div>
 
-              <div className="p-6 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3">
-                <h3 className="text-sm font-bold text-slate-200">
-                  Verified Academic &amp; Training Records
+              {/* 2. Headline & Bio Text */}
+              <div className="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-amber-400" />
+                  <span>2. Hero Headlines &amp; Introduction Text</span>
                 </h3>
-                <div className="space-y-2 text-xs text-slate-400">
-                  <p>
-                    <strong className="text-slate-300">Dawra-e-Hadith:</strong> Jamia Arabia Ashraful Ulum Kushtia — Result: Jayyid Jiddan.
-                  </p>
-                  <p>
-                    <strong className="text-slate-300">Dakhil Examination:</strong> 2026 — GPA 4.63.
-                  </p>
-                  <p>
-                    <strong className="text-slate-300">Alim Studies:</strong> Currently In Progress.
-                  </p>
-                  <p>
-                    <strong className="text-slate-300">As-Sunnah Institute:</strong> ~3.5 Months Intensive Professional Training in Graphic Design, Video Editing &amp; Meta Marketing.
-                  </p>
-                  <p>
-                    <strong className="text-slate-300">Calligraphy Experience:</strong> ~4 Years Continuous Practice in Thuluth, Diwani, Naskh &amp; 24K Gold Illumination.
-                  </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-medium text-slate-300 mb-1">
+                      Your Full Name (English)
+                    </label>
+                    <input
+                      type="text"
+                      value={profile.name.en}
+                      onChange={(e) =>
+                        setProfile({
+                          ...profile,
+                          name: { ...profile.name, en: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 text-sm bg-slate-900 border border-slate-700 rounded-lg text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-300 mb-1">
+                      Your Full Name (Bengali - বাংলা)
+                    </label>
+                    <input
+                      type="text"
+                      value={profile.name.bn}
+                      onChange={(e) =>
+                        setProfile({
+                          ...profile,
+                          name: { ...profile.name, bn: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 text-sm bg-slate-900 border border-slate-700 rounded-lg text-white"
+                    />
+                  </div>
                 </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-medium text-slate-300 mb-1">
+                      Professional Title
+                    </label>
+                    <input
+                      type="text"
+                      value={profile.title.en}
+                      onChange={(e) =>
+                        setProfile({
+                          ...profile,
+                          title: { ...profile.title, en: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 text-sm bg-slate-900 border border-slate-700 rounded-lg text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-slate-300 mb-1">
+                      Location
+                    </label>
+                    <input
+                      type="text"
+                      value={profile.location.en}
+                      onChange={(e) =>
+                        setProfile({
+                          ...profile,
+                          location: { ...profile.location, en: e.target.value },
+                        })
+                      }
+                      className="w-full px-3 py-2 text-sm bg-slate-900 border border-slate-700 rounded-lg text-white"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-slate-300 mb-1">
+                    Tagline / Subheading
+                  </label>
+                  <input
+                    type="text"
+                    value={profile.tagline.en}
+                    onChange={(e) =>
+                      setProfile({
+                        ...profile,
+                        tagline: { ...profile.tagline, en: e.target.value },
+                      })
+                    }
+                    className="w-full px-3 py-2 text-sm bg-slate-900 border border-slate-700 rounded-lg text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-medium text-slate-300 mb-1">
+                    About Me Bio Summary
+                  </label>
+                  <textarea
+                    rows={3}
+                    value={profile.bio.en}
+                    onChange={(e) =>
+                      setProfile({
+                        ...profile,
+                        bio: { ...profile.bio, en: e.target.value },
+                      })
+                    }
+                    className="w-full px-3 py-2 text-sm bg-slate-900 border border-slate-700 rounded-lg text-white resize-none"
+                  />
+                </div>
+              </div>
+
+              {/* 3. Featured Artworks Quick Image Swapper */}
+              <div className="p-6 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+                <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                  <Feather className="w-4 h-4 text-amber-400" />
+                  <span>3. Featured Calligraphy Artworks (Edit Text &amp; Image)</span>
+                </h3>
+
+                <div className="space-y-4">
+                  {calligraphy.slice(0, 2).map((art, idx) => (
+                    <div key={art.id} className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-[11px] text-slate-400 mb-1">Artwork Title</label>
+                          <input
+                            type="text"
+                            value={art.title.en}
+                            onChange={(e) => {
+                              const updated = [...calligraphy];
+                              updated[idx].title.en = e.target.value;
+                              setCalligraphy(updated);
+                            }}
+                            className="w-full px-3 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded-lg text-white"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-400 mb-1">Arabic Text (RTL)</label>
+                          <input
+                            type="text"
+                            dir="rtl"
+                            value={art.arabicText}
+                            onChange={(e) => {
+                              const updated = [...calligraphy];
+                              updated[idx].arabicText = e.target.value;
+                              setCalligraphy(updated);
+                            }}
+                            className="w-full px-3 py-1.5 text-xs bg-slate-950 border border-slate-700 rounded-lg text-amber-300 font-serif"
+                          />
+                        </div>
+                      </div>
+
+                      <ImageUploadField
+                        label={`Artwork #${idx + 1} Image`}
+                        value={art.thumbnail}
+                        onChange={(url) => {
+                          const updated = [...calligraphy];
+                          updated[idx].thumbnail = url;
+                          setCalligraphy(updated);
+                        }}
+                        mediaAssets={media}
+                        aspectRatio="video"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Save Button Footer */}
+              <div className="flex justify-end pt-2">
+                <button
+                  onClick={handleSaveAllQuickEdit}
+                  className="px-6 py-3 text-xs sm:text-sm font-semibold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-xl flex items-center gap-2 transition-all shadow-lg active:scale-95"
+                >
+                  <Save className="w-4 h-4" />
+                  <span>Save All Changes to Live Website</span>
+                </button>
               </div>
             </div>
           )}
 
-          {/* TAB 2: PROFILE & CREDENTIALS */}
+          {/* TAB 1: PROFILE & PHOTOS */}
           {activeTab === 'profile' && (
             <div className="space-y-6">
               <div className="flex items-center justify-between border-b border-slate-800 pb-4">
@@ -659,7 +830,26 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                 </button>
               </div>
 
-              <div className="space-y-4">
+              <div className="space-y-6">
+                {/* Images */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 rounded-xl bg-slate-950 border border-slate-800">
+                  <ImageUploadField
+                    label="Profile Avatar Photo"
+                    value={profile.avatarUrl}
+                    onChange={(url) => setProfile({ ...profile, avatarUrl: url })}
+                    mediaAssets={media}
+                    aspectRatio="square"
+                  />
+
+                  <ImageUploadField
+                    label="Site Logo / Monogram Image"
+                    value={profile.logoUrl}
+                    onChange={(url) => setProfile({ ...profile, logoUrl: url })}
+                    mediaAssets={media}
+                    aspectRatio="square"
+                  />
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-medium text-slate-300 mb-1">
@@ -793,7 +983,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-medium text-slate-300 mb-1">
                       WhatsApp Number
@@ -802,17 +992,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       type="text"
                       value={profile.whatsapp}
                       onChange={(e) => setProfile({ ...profile, whatsapp: e.target.value })}
-                      className="w-full px-3 py-2 text-sm bg-slate-950 border border-slate-700 rounded-lg text-white"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-slate-300 mb-1">
-                      Profile Avatar URL / Path
-                    </label>
-                    <input
-                      type="text"
-                      value={profile.avatarUrl}
-                      onChange={(e) => setProfile({ ...profile, avatarUrl: e.target.value })}
                       className="w-full px-3 py-2 text-sm bg-slate-950 border border-slate-700 rounded-lg text-white"
                     />
                   </div>
@@ -837,7 +1016,416 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </div>
           )}
 
-          {/* TAB 3: EDUCATION & TRAINING */}
+          {/* TAB 2: ARABIC CALLIGRAPHY */}
+          {activeTab === 'calligraphy' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div>
+                  <h2 className="text-xl font-bold font-display text-white">
+                    Arabic Calligraphy Artworks Gallery
+                  </h2>
+                  <p className="text-xs text-slate-400">
+                    Upload photos, edit Arabic texts, select script styles, and update pricing/status.
+                  </p>
+                </div>
+                <button
+                  onClick={handleAddCalligraphy}
+                  className="px-3.5 py-2 text-xs font-semibold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-lg flex items-center gap-1.5 transition-colors"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Add Artwork</span>
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                {calligraphy.map((art, idx) => (
+                  <div
+                    key={art.id}
+                    className="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-amber-400 uppercase tracking-wider">
+                        {art.scriptStyle} Script
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={async () => {
+                            try {
+                              await api.updateCalligraphy(art.id, art);
+                              showSuccess('Artwork saved to live database');
+                            } catch (e: any) {
+                              showError(e.message);
+                            }
+                          }}
+                          className="px-3 py-1 bg-amber-400 hover:bg-amber-300 text-slate-950 font-semibold text-xs rounded transition-colors"
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={() => handleDeleteCalligraphy(art.id)}
+                          className="p-1.5 text-slate-500 hover:text-rose-400"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] text-slate-400 mb-1">Title (English)</label>
+                        <input
+                          type="text"
+                          value={art.title.en}
+                          onChange={(e) => {
+                            const updated = [...calligraphy];
+                            updated[idx].title.en = e.target.value;
+                            setCalligraphy(updated);
+                          }}
+                          className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] text-slate-400 mb-1">Script Style</label>
+                        <select
+                          value={art.scriptStyle}
+                          onChange={(e) => {
+                            const updated = [...calligraphy];
+                            updated[idx].scriptStyle = e.target.value as any;
+                            setCalligraphy(updated);
+                          }}
+                          className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white"
+                        >
+                          <option value="Thuluth">Thuluth</option>
+                          <option value="Diwani">Diwani</option>
+                          <option value="Naskh">Naskh</option>
+                          <option value="Kufic">Kufic</option>
+                          <option value="Ruq'ah">Ruq'ah</option>
+                          <option value="Modern">Modern</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-[11px] text-slate-400 mb-1">
+                        Arabic Calligraphy Text (RTL)
+                      </label>
+                      <input
+                        type="text"
+                        dir="rtl"
+                        value={art.arabicText}
+                        onChange={(e) => {
+                          const updated = [...calligraphy];
+                          updated[idx].arabicText = e.target.value;
+                          setCalligraphy(updated);
+                        }}
+                        className="w-full px-3 py-2 text-sm bg-slate-900 border border-slate-700 rounded-lg text-amber-300 font-serif"
+                      />
+                    </div>
+
+                    {/* Image Uploader */}
+                    <ImageUploadField
+                      label="Artwork Photo"
+                      value={art.thumbnail}
+                      onChange={(url) => {
+                        const updated = [...calligraphy];
+                        updated[idx].thumbnail = url;
+                        setCalligraphy(updated);
+                      }}
+                      mediaAssets={media}
+                      aspectRatio="video"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 3: GRAPHIC DESIGN */}
+          {activeTab === 'design' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div>
+                  <h2 className="text-xl font-bold font-display text-white">
+                    Graphic Design Projects
+                  </h2>
+                  <p className="text-xs text-slate-400">
+                    Add, edit, or feature branding packages, posters, and social kits.
+                  </p>
+                </div>
+                <button
+                  onClick={handleAddDesignProject}
+                  className="px-3.5 py-2 text-xs font-semibold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-lg flex items-center gap-1.5 transition-colors"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Add Project</span>
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                {designProjects.map((p, idx) => (
+                  <div
+                    key={p.id}
+                    className="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-blue-400">{p.category}</span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={async () => {
+                            try {
+                              await api.updateDesignProject(p.id, p);
+                              showSuccess('Design project saved');
+                            } catch (e: any) {
+                              showError(e.message);
+                            }
+                          }}
+                          className="px-3 py-1 bg-amber-400 hover:bg-amber-300 text-slate-950 font-semibold text-xs rounded transition-colors"
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={() => handleDeleteDesign(p.id)}
+                          className="p-1.5 text-slate-500 hover:text-rose-400"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] text-slate-400 mb-1">Project Title</label>
+                        <input
+                          type="text"
+                          value={p.title.en}
+                          onChange={(e) => {
+                            const updated = [...designProjects];
+                            updated[idx].title.en = e.target.value;
+                            setDesignProjects(updated);
+                          }}
+                          className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] text-slate-400 mb-1">Client</label>
+                        <input
+                          type="text"
+                          value={p.client || ''}
+                          onChange={(e) => {
+                            const updated = [...designProjects];
+                            updated[idx].client = e.target.value;
+                            setDesignProjects(updated);
+                          }}
+                          className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Image Uploader */}
+                    <ImageUploadField
+                      label="Project Thumbnail Image"
+                      value={p.thumbnail}
+                      onChange={(url) => {
+                        const updated = [...designProjects];
+                        updated[idx].thumbnail = url;
+                        setDesignProjects(updated);
+                      }}
+                      mediaAssets={media}
+                      aspectRatio="video"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 4: VIDEO PROJECTS */}
+          {activeTab === 'video' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div>
+                  <h2 className="text-xl font-bold font-display text-white">
+                    Video Editing Projects
+                  </h2>
+                  <p className="text-xs text-slate-400">
+                    Manage video URLs, YouTube/Vimeo embeds, durations, and cover thumbnails.
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-6">
+                {videoProjects.map((v, idx) => (
+                  <div key={v.id} className="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-semibold text-purple-400">{v.category}</span>
+                      <button
+                        onClick={async () => {
+                          try {
+                            await api.updateVideoProject(v.id, v);
+                            showSuccess('Video project saved');
+                          } catch (e: any) {
+                            showError(e.message);
+                          }
+                        }}
+                        className="px-3 py-1 bg-amber-400 hover:bg-amber-300 text-slate-950 font-semibold text-xs rounded transition-colors"
+                      >
+                        Save
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] text-slate-400 mb-1">Video Title</label>
+                        <input
+                          type="text"
+                          value={v.title.en}
+                          onChange={(e) => {
+                            const updated = [...videoProjects];
+                            updated[idx].title.en = e.target.value;
+                            setVideoProjects(updated);
+                          }}
+                          className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] text-slate-400 mb-1">Video URL (YouTube/Vimeo)</label>
+                        <input
+                          type="text"
+                          value={v.videoUrl}
+                          onChange={(e) => {
+                            const updated = [...videoProjects];
+                            updated[idx].videoUrl = e.target.value;
+                            setVideoProjects(updated);
+                          }}
+                          className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white"
+                        />
+                      </div>
+                    </div>
+
+                    <ImageUploadField
+                      label="Video Cover Thumbnail"
+                      value={v.thumbnail}
+                      onChange={(url) => {
+                        const updated = [...videoProjects];
+                        updated[idx].thumbnail = url;
+                        setVideoProjects(updated);
+                      }}
+                      mediaAssets={media}
+                      aspectRatio="video"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 5: ALL LINKS MANAGER */}
+          {activeTab === 'links' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div>
+                  <h2 className="text-xl font-bold font-display text-white">
+                    All Links &amp; Social Channels
+                  </h2>
+                  <p className="text-xs text-slate-400">
+                    Add unlimited custom links with display order and visibility controls.
+                  </p>
+                </div>
+                <button
+                  onClick={handleAddLink}
+                  className="px-3.5 py-2 text-xs font-semibold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-lg flex items-center gap-1.5 transition-colors"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Add New Link</span>
+                </button>
+              </div>
+
+              <div className="space-y-3">
+                {links.map((link, idx) => (
+                  <div
+                    key={link.id}
+                    className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-white">{link.title}</span>
+                        <span className="text-[11px] text-slate-400 uppercase">({link.platform})</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={async () => {
+                            const updated = [...links];
+                            updated[idx].isVisible = !updated[idx].isVisible;
+                            setLinks(updated);
+                            await api.updateLink(link.id, { isVisible: updated[idx].isVisible });
+                            showSuccess('Visibility toggled');
+                          }}
+                          className={`p-1.5 rounded text-xs transition-colors ${
+                            link.isVisible
+                              ? 'text-emerald-400 bg-emerald-500/10'
+                              : 'text-slate-500 bg-slate-800'
+                          }`}
+                          title="Toggle Public Visibility"
+                        >
+                          {link.isVisible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                        </button>
+                        <button
+                          onClick={async () => {
+                            try {
+                              await api.updateLink(link.id, link);
+                              showSuccess('Link saved');
+                            } catch (e: any) {
+                              showError(e.message);
+                            }
+                          }}
+                          className="px-3 py-1 bg-amber-400 hover:bg-amber-300 text-slate-950 font-semibold text-xs rounded transition-colors"
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={() => handleDeleteLink(link.id)}
+                          className="p-1.5 text-slate-500 hover:text-rose-400"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] text-slate-400 mb-1">Title</label>
+                        <input
+                          type="text"
+                          value={link.title}
+                          onChange={(e) => {
+                            const updated = [...links];
+                            updated[idx].title = e.target.value;
+                            setLinks(updated);
+                          }}
+                          className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] text-slate-400 mb-1">URL Target</label>
+                        <input
+                          type="text"
+                          value={link.url}
+                          onChange={(e) => {
+                            const updated = [...links];
+                            updated[idx].url = e.target.value;
+                            setLinks(updated);
+                          }}
+                          className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 6: EDUCATION & TRAINING */}
           {activeTab === 'education' && (
             <div className="space-y-6">
               <div className="flex items-center justify-between border-b border-slate-800 pb-4">
@@ -955,401 +1543,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
             </div>
           )}
 
-          {/* TAB 4: ARABIC CALLIGRAPHY */}
-          {activeTab === 'calligraphy' && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-                <div>
-                  <h2 className="text-xl font-bold font-display text-white">
-                    Arabic Calligraphy Artworks Gallery
-                  </h2>
-                  <p className="text-xs text-slate-400">
-                    Manage sacred text artworks, scripts, photos, and sale/commission status.
-                  </p>
-                </div>
-                <button
-                  onClick={handleAddCalligraphy}
-                  className="px-3.5 py-2 text-xs font-semibold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-lg flex items-center gap-1.5 transition-colors"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Add Artwork</span>
-                </button>
-              </div>
-
-              <div className="space-y-4">
-                {calligraphy.map((art, idx) => (
-                  <div
-                    key={art.id}
-                    className="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-amber-400 uppercase tracking-wider">
-                        {art.scriptStyle} Script
-                      </span>
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={async () => {
-                            try {
-                              await api.updateCalligraphy(art.id, art);
-                              showSuccess('Artwork saved');
-                            } catch (e: any) {
-                              showError(e.message);
-                            }
-                          }}
-                          className="px-3 py-1 bg-amber-400 hover:bg-amber-300 text-slate-950 font-semibold text-xs rounded transition-colors"
-                        >
-                          Save
-                        </button>
-                        <button
-                          onClick={() => handleDeleteCalligraphy(art.id)}
-                          className="p-1.5 text-slate-500 hover:text-rose-400"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-[11px] text-slate-400 mb-1">Title (English)</label>
-                        <input
-                          type="text"
-                          value={art.title.en}
-                          onChange={(e) => {
-                            const updated = [...calligraphy];
-                            updated[idx].title.en = e.target.value;
-                            setCalligraphy(updated);
-                          }}
-                          className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-[11px] text-slate-400 mb-1">Script Style</label>
-                        <select
-                          value={art.scriptStyle}
-                          onChange={(e) => {
-                            const updated = [...calligraphy];
-                            updated[idx].scriptStyle = e.target.value as any;
-                            setCalligraphy(updated);
-                          }}
-                          className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white"
-                        >
-                          <option value="Thuluth">Thuluth</option>
-                          <option value="Diwani">Diwani</option>
-                          <option value="Naskh">Naskh</option>
-                          <option value="Kufic">Kufic</option>
-                          <option value="Ruq'ah">Ruq'ah</option>
-                          <option value="Modern">Modern</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] text-slate-400 mb-1">
-                        Arabic Calligraphy Text (RTL)
-                      </label>
-                      <input
-                        type="text"
-                        dir="rtl"
-                        value={art.arabicText}
-                        onChange={(e) => {
-                          const updated = [...calligraphy];
-                          updated[idx].arabicText = e.target.value;
-                          setCalligraphy(updated);
-                        }}
-                        className="w-full px-3 py-2 text-sm bg-slate-900 border border-slate-700 rounded-lg text-amber-300 font-serif"
-                      />
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-[11px] text-slate-400 mb-1">Image URL / Path</label>
-                        <input
-                          type="text"
-                          value={art.thumbnail}
-                          onChange={(e) => {
-                            const updated = [...calligraphy];
-                            updated[idx].thumbnail = e.target.value;
-                            setCalligraphy(updated);
-                          }}
-                          className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-[11px] text-slate-400 mb-1">Dimensions</label>
-                        <input
-                          type="text"
-                          value={art.dimensions || ''}
-                          onChange={(e) => {
-                            const updated = [...calligraphy];
-                            updated[idx].dimensions = e.target.value;
-                            setCalligraphy(updated);
-                          }}
-                          placeholder="e.g. 50 x 70 cm"
-                          className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* TAB 5: GRAPHIC DESIGN */}
-          {activeTab === 'design' && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-                <div>
-                  <h2 className="text-xl font-bold font-display text-white">
-                    Graphic Design Projects
-                  </h2>
-                  <p className="text-xs text-slate-400">
-                    Add, edit, or feature branding packages, posters, and social kits.
-                  </p>
-                </div>
-                <button
-                  onClick={handleAddDesignProject}
-                  className="px-3.5 py-2 text-xs font-semibold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-lg flex items-center gap-1.5 transition-colors"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Add Project</span>
-                </button>
-              </div>
-
-              <div className="space-y-4">
-                {designProjects.map((p, idx) => (
-                  <div
-                    key={p.id}
-                    className="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-blue-400">{p.category}</span>
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={async () => {
-                            try {
-                              await api.updateDesignProject(p.id, p);
-                              showSuccess('Design project saved');
-                            } catch (e: any) {
-                              showError(e.message);
-                            }
-                          }}
-                          className="px-3 py-1 bg-amber-400 hover:bg-amber-300 text-slate-950 font-semibold text-xs rounded transition-colors"
-                        >
-                          Save
-                        </button>
-                        <button
-                          onClick={() => handleDeleteDesign(p.id)}
-                          className="p-1.5 text-slate-500 hover:text-rose-400"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-[11px] text-slate-400 mb-1">Project Title</label>
-                        <input
-                          type="text"
-                          value={p.title.en}
-                          onChange={(e) => {
-                            const updated = [...designProjects];
-                            updated[idx].title.en = e.target.value;
-                            setDesignProjects(updated);
-                          }}
-                          className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-[11px] text-slate-400 mb-1">Client</label>
-                        <input
-                          type="text"
-                          value={p.client || ''}
-                          onChange={(e) => {
-                            const updated = [...designProjects];
-                            updated[idx].client = e.target.value;
-                            setDesignProjects(updated);
-                          }}
-                          className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      <div>
-                        <label className="block text-[11px] text-slate-400 mb-1">Image URL</label>
-                        <input
-                          type="text"
-                          value={p.thumbnail}
-                          onChange={(e) => {
-                            const updated = [...designProjects];
-                            updated[idx].thumbnail = e.target.value;
-                            setDesignProjects(updated);
-                          }}
-                          className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-[11px] text-slate-400 mb-1">External Link</label>
-                        <input
-                          type="text"
-                          value={p.externalUrl || ''}
-                          onChange={(e) => {
-                            const updated = [...designProjects];
-                            updated[idx].externalUrl = e.target.value;
-                            setDesignProjects(updated);
-                          }}
-                          placeholder="https://behance.net/..."
-                          className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* TAB 6: ALL LINKS MANAGER (Unlimited by design) */}
-          {activeTab === 'links' && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-                <div>
-                  <h2 className="text-xl font-bold font-display text-white">
-                    All Links &amp; Social Channels Manager
-                  </h2>
-                  <p className="text-xs text-slate-400">
-                    Add unlimited custom links with display order and visibility controls.
-                  </p>
-                </div>
-                <button
-                  onClick={handleAddLink}
-                  className="px-3.5 py-2 text-xs font-semibold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-lg flex items-center gap-1.5 transition-colors"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Add New Link</span>
-                </button>
-              </div>
-
-              <div className="space-y-3">
-                {links.map((link, idx) => (
-                  <div
-                    key={link.id}
-                    className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xs font-bold text-white">{link.title}</span>
-                        <span className="text-[11px] text-slate-400 uppercase">({link.platform})</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={async () => {
-                            const updated = [...links];
-                            updated[idx].isVisible = !updated[idx].isVisible;
-                            setLinks(updated);
-                            await api.updateLink(link.id, { isVisible: updated[idx].isVisible });
-                            showSuccess('Visibility toggled');
-                          }}
-                          className={`p-1.5 rounded text-xs transition-colors ${
-                            link.isVisible
-                              ? 'text-emerald-400 bg-emerald-500/10'
-                              : 'text-slate-500 bg-slate-800'
-                          }`}
-                          title="Toggle Public Visibility"
-                        >
-                          {link.isVisible ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
-                        </button>
-                        <button
-                          onClick={async () => {
-                            try {
-                              await api.updateLink(link.id, link);
-                              showSuccess('Link saved');
-                            } catch (e: any) {
-                              showError(e.message);
-                            }
-                          }}
-                          className="px-3 py-1 bg-amber-400 hover:bg-amber-300 text-slate-950 font-semibold text-xs rounded transition-colors"
-                        >
-                          Save
-                        </button>
-                        <button
-                          onClick={() => handleDeleteLink(link.id)}
-                          className="p-1.5 text-slate-500 hover:text-rose-400"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      <div>
-                        <label className="block text-[11px] text-slate-400 mb-1">Title</label>
-                        <input
-                          type="text"
-                          value={link.title}
-                          onChange={(e) => {
-                            const updated = [...links];
-                            updated[idx].title = e.target.value;
-                            setLinks(updated);
-                          }}
-                          className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-[11px] text-slate-400 mb-1">URL Target</label>
-                        <input
-                          type="text"
-                          value={link.url}
-                          onChange={(e) => {
-                            const updated = [...links];
-                            updated[idx].url = e.target.value;
-                            setLinks(updated);
-                          }}
-                          className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-[11px] text-slate-400 mb-1">Platform Category</label>
-                        <select
-                          value={link.platform}
-                          onChange={(e) => {
-                            const updated = [...links];
-                            updated[idx].platform = e.target.value as any;
-                            setLinks(updated);
-                          }}
-                          className="w-full px-3 py-1.5 text-xs bg-slate-900 border border-slate-700 rounded-lg text-white"
-                        >
-                          <option value="behance">Behance</option>
-                          <option value="youtube">YouTube</option>
-                          <option value="facebook">Facebook</option>
-                          <option value="instagram">Instagram</option>
-                          <option value="linkedin">LinkedIn</option>
-                          <option value="bdjobs">BDJobs</option>
-                          <option value="whatsapp">WhatsApp</option>
-                          <option value="email">Email</option>
-                          <option value="website">Custom Website</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* TAB 7: VISUAL WEBSITE CUSTOMIZER */}
           {activeTab === 'theme' && (
             <div className="space-y-6">
               <div className="flex items-center justify-between border-b border-slate-800 pb-4">
                 <div>
                   <h2 className="text-xl font-bold font-display text-white">
-                    Advanced Visual Website Customizer
+                    Visual Website Customizer
                   </h2>
                   <p className="text-xs text-slate-400">
-                    Real-time palette, card styles, and homepage section order. Changes persist permanently.
+                    Real-time palette, card styles, and homepage section order.
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -1558,19 +1761,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                     Upload new photos, artwork scans, and logos directly to the persistent server storage.
                   </p>
                 </div>
-                <div>
-                  <label className="px-3.5 py-2 text-xs font-semibold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-lg flex items-center gap-1.5 transition-colors cursor-pointer">
-                    <Upload className="w-3.5 h-3.5" />
-                    <span>{uploading ? 'Uploading...' : 'Upload Media File'}</span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileUpload}
-                      className="hidden"
-                      disabled={uploading}
-                    />
-                  </label>
-                </div>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -1737,6 +1927,65 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                   Change Password
                 </button>
               </form>
+            </div>
+          )}
+
+          {/* TAB 12: SYSTEM OVERVIEW */}
+          {activeTab === 'overview' && (
+            <div className="space-y-6">
+              <h2 className="text-xl font-bold font-display text-white">
+                Dashboard Overview &amp; Content Summary
+              </h2>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800">
+                  <span className="text-xs text-slate-400 block">Calligraphy Works</span>
+                  <span className="text-2xl font-bold font-display text-white mt-1 block">
+                    {calligraphy.length}
+                  </span>
+                </div>
+                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800">
+                  <span className="text-xs text-slate-400 block">Graphic Design</span>
+                  <span className="text-2xl font-bold font-display text-white mt-1 block">
+                    {designProjects.length}
+                  </span>
+                </div>
+                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800">
+                  <span className="text-xs text-slate-400 block">Video Projects</span>
+                  <span className="text-2xl font-bold font-display text-white mt-1 block">
+                    {videoProjects.length}
+                  </span>
+                </div>
+                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800">
+                  <span className="text-xs text-slate-400 block">Unread Inquiries</span>
+                  <span className="text-2xl font-bold font-display text-amber-400 mt-1 block">
+                    {inquiries.filter((i) => !i.read).length}
+                  </span>
+                </div>
+              </div>
+
+              <div className="p-6 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-3">
+                <h3 className="text-sm font-bold text-slate-200">
+                  Verified Academic &amp; Training Records
+                </h3>
+                <div className="space-y-2 text-xs text-slate-400">
+                  <p>
+                    <strong className="text-slate-300">Dawra-e-Hadith:</strong> Jamia Arabia Ashraful Ulum Kushtia — Result: Jayyid Jiddan.
+                  </p>
+                  <p>
+                    <strong className="text-slate-300">Dakhil Examination:</strong> 2026 — GPA 4.63.
+                  </p>
+                  <p>
+                    <strong className="text-slate-300">Alim Studies:</strong> Currently In Progress.
+                  </p>
+                  <p>
+                    <strong className="text-slate-300">As-Sunnah Institute:</strong> ~3.5 Months Intensive Professional Training in Graphic Design, Video Editing &amp; Meta Marketing.
+                  </p>
+                  <p>
+                    <strong className="text-slate-300">Calligraphy Experience:</strong> ~4 Years Continuous Practice in Thuluth, Diwani, Naskh &amp; 24K Gold Illumination.
+                  </p>
+                </div>
+              </div>
             </div>
           )}
         </div>
