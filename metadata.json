@@ -1,0 +1,6 @@
+{
+  "name": "Creative Portfolio & CMS",
+  "description": "Production-grade portfolio & multilingual CMS for graphic design, video editing, Meta marketing, and Arabic calligraphy.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
