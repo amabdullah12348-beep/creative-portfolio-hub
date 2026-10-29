@@ -412,33 +412,41 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   // If not logged in, render the login card
   if (!isAdmin) {
     return (
-      <div className="min-h-[80vh] flex items-center justify-center p-4">
-        <div className="max-w-md w-full p-8 rounded-3xl bg-slate-900 border border-slate-800 shadow-2xl space-y-6">
+      <div className="min-h-[80vh] flex items-center justify-center p-4 bg-[#f8fafc]">
+        <div className="max-w-md w-full p-8 rounded-3xl bg-white border-2 border-emerald-500/30 shadow-2xl space-y-6">
           <div className="text-center space-y-2">
-            <div className="w-12 h-12 bg-amber-500/10 border border-amber-500/30 rounded-2xl flex items-center justify-center mx-auto text-amber-400">
-              <Lock className="w-6 h-6" />
+            <div className="w-14 h-14 bg-emerald-50 border-2 border-emerald-300 rounded-2xl flex items-center justify-center mx-auto text-[#006a4e] shadow-sm">
+              <Lock className="w-7 h-7" />
             </div>
-            <h1 className="text-2xl font-bold font-display text-white">
-              CMS Admin Dashboard
+            <h1 className="text-2xl font-bold font-display text-slate-900">
+              অ্যাডমিন CMS ড্যাশবোর্ড
             </h1>
-            <p className="text-xs text-slate-400">
-              Password-protected content management system. Edit text, photos, and projects directly from your browser.
+            <p className="text-xs text-slate-600 leading-relaxed">
+              পাসওয়ার্ড দিয়ে লগইন করে সরাসরি ব্রাউজার থেকে আপনার ছবি, নাম, ক্যালিগ্রাফি ও সকল প্রজেক্ট এডিট বা সংশোধন করুন।
             </p>
           </div>
 
-          <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs flex items-center justify-between">
-            <span>Default Password: <strong className="font-mono text-white">admin123</strong></span>
-            <button
-              type="button"
-              onClick={() => setLoginPassword('admin123')}
-              className="text-[11px] underline text-amber-400 hover:text-amber-200"
-            >
-              Fill Password
-            </button>
+          <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-slate-800 text-xs space-y-1.5">
+            <div className="flex items-center justify-between">
+              <span className="font-semibold text-[#006a4e]">ডিফল্ট পাসওয়ার্ড:</span>
+              <strong className="font-mono text-slate-900 bg-white px-2 py-0.5 rounded border border-emerald-300">
+                admin123
+              </strong>
+            </div>
+            <div className="flex items-center justify-between pt-1 border-t border-emerald-100">
+              <span className="text-[11px] text-slate-500">এক ক্লিকে পাসওয়ার্ড দিন:</span>
+              <button
+                type="button"
+                onClick={() => setLoginPassword('admin123')}
+                className="text-xs font-bold text-[#006a4e] hover:underline"
+              >
+                পাসওয়ার্ড বসান
+              </button>
+            </div>
           </div>
 
           {loginError && (
-            <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
+            <div className="p-3 rounded-lg bg-rose-50 border border-rose-300 text-rose-700 text-xs flex items-center gap-2">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{loginError}</span>
             </div>
@@ -446,34 +454,35 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
           <form onSubmit={handleLoginSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">
-                Admin Password
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                অ্যাডমিন পাসওয়ার্ড (Admin Password)
               </label>
               <input
                 type="password"
                 required
                 value={loginPassword}
                 onChange={(e) => setLoginPassword(e.target.value)}
-                placeholder="Enter admin password"
-                className="w-full px-3.5 py-2.5 text-sm bg-slate-950 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-amber-400"
+                placeholder="admin123"
+                className="w-full px-4 py-3 text-sm bg-slate-50 border border-slate-300 rounded-xl text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#006a4e] focus:border-transparent"
               />
             </div>
 
             <button
               type="submit"
               disabled={isLoggingIn}
-              className="w-full py-2.5 text-xs font-semibold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-xl shadow-md transition-all disabled:opacity-50"
+              className="w-full py-3 text-xs sm:text-sm font-bold text-white bg-[#006a4e] hover:bg-[#00543c] rounded-xl shadow-md transition-all disabled:opacity-50 flex items-center justify-center gap-2"
             >
-              {isLoggingIn ? 'Verifying...' : 'Sign In to Dashboard'}
+              <Lock className="w-4 h-4" />
+              <span>{isLoggingIn ? 'যাচাই করা হচ্ছে...' : 'লগইন করুন (Sign In)'}</span>
             </button>
           </form>
 
           <div className="text-center pt-2">
             <button
               onClick={onNavigateHome}
-              className="text-xs text-slate-400 hover:text-white transition-colors"
+              className="text-xs font-semibold text-[#006a4e] hover:underline"
             >
-              &larr; Return to Public Website
+              &larr; মূল ওয়েবসাইটে ফিরে যান
             </button>
           </div>
         </div>

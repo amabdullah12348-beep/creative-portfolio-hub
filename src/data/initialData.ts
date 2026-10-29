@@ -837,16 +837,16 @@ export const initialData: DatabaseState = {
     },
   ],
   themeSettings: {
-    primaryColor: '#f59e0b', // Amber 500 / Gold
-    secondaryColor: '#d97706', // Amber 600
-    accentColor: '#fbbf24', // Amber 400
-    backgroundColor: '#080d1a', // Rich deep navy/charcoal
-    surfaceColor: '#0f172a', // Slate 900
-    textColor: '#f8fafc',
-    borderColor: '#1e293b',
-    cardRadius: 'rounded-xl',
+    primaryColor: '#006a4e', // As-Sunnah Signature Islamic Green
+    secondaryColor: '#059669', // Emerald Accent
+    accentColor: '#f59e0b', // Warm Gold
+    backgroundColor: '#f8fafc', // Crisp Clean Canvas
+    surfaceColor: '#ffffff', // Crisp White Cards
+    textColor: '#0f172a', // Deep Slate Typography
+    borderColor: '#e2e8f0', // Subtle Clean Hairline Border
+    cardRadius: 'rounded-2xl',
     cardStyle: 'bordered',
-    fontFamily: 'outfit',
+    fontFamily: 'jakarta',
     layoutPreset: 'classic_editorial',
     homepageSections: {
       hero: true,

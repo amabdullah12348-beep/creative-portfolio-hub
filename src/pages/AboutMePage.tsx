@@ -14,6 +14,8 @@ import {
   Clock,
   Sparkles,
   ExternalLink,
+  ShieldCheck,
+  Send,
 } from 'lucide-react';
 
 interface AboutMePageProps {
@@ -44,166 +46,174 @@ export const AboutMePage: React.FC<AboutMePageProps> = ({
   });
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16 pb-24">
-      {/* 1. Profile Bio Header */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        <div className="lg:col-span-4 flex justify-center">
-          <div className="relative group">
-            <div className="w-64 h-64 sm:w-80 sm:h-80 rounded-3xl overflow-hidden border-2 border-amber-500/30 bg-slate-900 shadow-2xl p-2">
-              <img
-                src={profile.avatarUrl}
-                alt={t(profile.name)}
-                referrerPolicy="no-referrer"
-                className="w-full h-full object-cover rounded-2xl group-hover:scale-103 transition-transform duration-500"
-              />
-            </div>
-            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-slate-900/90 border border-amber-500/40 text-amber-300 text-xs font-semibold whitespace-nowrap shadow-lg">
-              {ui.experienceYears}
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16 pb-24 text-slate-800">
+      {/* 1. Profile Bio Header (As-Sunnah Style) */}
+      <div className="p-8 sm:p-10 rounded-3xl bg-white border border-slate-200/90 shadow-md">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div className="lg:col-span-4 flex justify-center">
+            <div className="relative group">
+              <div className="w-64 h-64 sm:w-72 sm:h-72 rounded-3xl overflow-hidden border-4 border-emerald-500/30 bg-slate-100 shadow-xl p-1.5">
+                <img
+                  src={profile.avatarUrl}
+                  alt={t(profile.name)}
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover rounded-2xl group-hover:scale-102 transition-transform duration-500"
+                />
+              </div>
+              <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-[#006a4e] text-white text-xs font-bold whitespace-nowrap shadow-md">
+                {ui.experienceYears}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="lg:col-span-8 space-y-6">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-xs font-semibold text-amber-400 uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>{ui.aboutMe}</span>
+          <div className="lg:col-span-8 space-y-5">
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-xs font-bold text-[#006a4e] uppercase tracking-wider">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>{ui.aboutMe}</span>
+              </div>
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-display text-slate-900 tracking-tight">
+                {t(profile.name)}
+              </h1>
+              <p className="text-lg font-bold text-[#006a4e]">
+                {t(profile.title)}
+              </p>
             </div>
-            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-display text-white tracking-tight">
-              {t(profile.name)}
-            </h1>
-            <p className="text-lg font-medium text-amber-300/90">
-              {t(profile.title)}
+
+            <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+              {t(profile.bio)}
             </p>
-          </div>
 
-          <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-            {t(profile.bio)}
-          </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-700 pt-2 border-t border-slate-100">
+              <div className="flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-[#006a4e] shrink-0" />
+                <span><strong>বর্তমান অবস্থান:</strong> {t(profile.location)}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Award className="w-4 h-4 text-[#006a4e] shrink-0" />
+                <span><strong>প্রশিক্ষণ ইনস্টিটিউট:</strong> {t(profile.trainingInstitute)}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Mail className="w-4 h-4 text-[#006a4e] shrink-0" />
+                <span><strong>ইমেইল:</strong> {profile.email}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Phone className="w-4 h-4 text-[#006a4e] shrink-0" />
+                <span><strong>হোয়াটসঅ্যাপ/মোবাইল:</strong> {profile.whatsapp}</span>
+              </div>
+            </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-300 pt-2">
-            <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>{t(profile.location)}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Award className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>{t(profile.trainingInstitute)}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Mail className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>{profile.email}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Phone className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>{profile.whatsapp}</span>
-            </div>
-          </div>
+            {/* Action buttons: Download CV & Contact */}
+            <div className="pt-3 flex flex-wrap items-center gap-4">
+              <button
+                onClick={onOpenCvModal}
+                className="px-6 py-3 text-xs sm:text-sm font-bold text-white bg-[#006a4e] hover:bg-[#00543c] rounded-xl transition-all shadow-md flex items-center gap-2"
+              >
+                <Download className="w-4 h-4" />
+                <span>{ui.downloadCv} (সিভি ডাউনলোড)</span>
+              </button>
 
-          {/* Action buttons: Download CV & Contact */}
-          <div className="pt-4 flex flex-wrap items-center gap-4">
-            <button
-              onClick={onOpenCvModal}
-              className="px-5 py-2.5 text-xs font-semibold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all shadow-sm flex items-center gap-2"
-            >
-              <Download className="w-4 h-4" />
-              <span>{ui.downloadCv}</span>
-            </button>
-
-            <button
-              onClick={() => onOpenInquiry('general')}
-              className="px-5 py-2.5 text-xs font-medium text-slate-200 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-xl transition-all flex items-center gap-2"
-            >
-              <MessageSquare className="w-4 h-4" />
-              <span>{ui.contactMe}</span>
-            </button>
+              <button
+                onClick={() => onOpenInquiry('general')}
+                className="px-5 py-3 text-xs sm:text-sm font-semibold text-[#006a4e] hover:text-white bg-emerald-50 hover:bg-[#006a4e] border border-emerald-300 rounded-xl transition-all flex items-center gap-2"
+              >
+                <MessageSquare className="w-4 h-4" />
+                <span>{ui.contactMe}</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* 2. Structured Timeline: Education vs Training */}
-      <section className="space-y-8">
+      {/* 2. Structured Timeline: Academic Education vs Skill Training */}
+      <section className="space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold font-display text-white tracking-tight">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#006a4e] uppercase tracking-wider mb-1">
+              <BookOpen className="w-4 h-4" />
+              <span>প্রাতিষ্ঠানিক রেকর্ড</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold font-display text-slate-900 tracking-tight">
               {ui.educationTrainingTitle}
             </h2>
-            <p className="text-xs text-slate-400 mt-1">
-              Clear distinction between formal Islamic academic qualifications and professional skill development.
+            <p className="text-xs sm:text-sm text-slate-500 mt-1">
+              শাস্ত্রীয় প্রাতিষ্ঠানিক ডিগ্রি এবং পেশাদার প্রযুক্তিগত প্রশিক্ষণের স্পষ্ট সত্যায়ন।
             </p>
           </div>
 
-          <div className="flex items-center gap-1.5 p-1 bg-slate-900 border border-slate-800 rounded-lg self-start sm:self-auto text-xs">
+          <div className="flex items-center gap-1.5 p-1 bg-white border border-slate-200 rounded-xl self-start sm:self-auto text-xs shadow-xs">
             <button
               onClick={() => setActiveTab('all')}
-              className={`px-3 py-1.5 rounded-md font-medium transition-colors ${
+              className={`px-3.5 py-1.5 rounded-lg font-bold transition-colors ${
                 activeTab === 'all'
-                  ? 'bg-amber-400 text-slate-950 font-semibold'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-[#006a4e] text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              All Records
+              সকল রেকর্ড
             </button>
             <button
               onClick={() => setActiveTab('education')}
-              className={`px-3 py-1.5 rounded-md font-medium transition-colors ${
+              className={`px-3.5 py-1.5 rounded-lg font-bold transition-colors ${
                 activeTab === 'education'
-                  ? 'bg-amber-400 text-slate-950 font-semibold'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-[#006a4e] text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Academic
+              একাডেমিক ডিগ্রি
             </button>
             <button
               onClick={() => setActiveTab('training')}
-              className={`px-3 py-1.5 rounded-md font-medium transition-colors ${
+              className={`px-3.5 py-1.5 rounded-lg font-bold transition-colors ${
                 activeTab === 'training'
-                  ? 'bg-amber-400 text-slate-950 font-semibold'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-[#006a4e] text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Skill Training
+              স্কিল ট্রেনিং
             </button>
           </div>
         </div>
 
-        <div className="relative pl-6 sm:pl-8 border-l-2 border-slate-800 space-y-10">
+        <div className="relative pl-6 sm:pl-8 border-l-2 border-emerald-300 space-y-8">
           {filteredEducation.map((item) => (
             <div key={item.id} className="relative group">
               {/* Dot marker */}
               <div
-                className={`absolute -left-[31px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-full border-2 ${
+                className={`absolute -left-[31px] sm:-left-[39px] top-2 w-4 h-4 rounded-full border-2 ${
                   item.type === 'education'
-                    ? 'bg-blue-950 border-blue-400'
-                    : 'bg-amber-950 border-amber-400'
+                    ? 'bg-emerald-600 border-emerald-200 ring-4 ring-emerald-100'
+                    : 'bg-amber-500 border-amber-200 ring-4 ring-amber-100'
                 }`}
               />
 
-              <div className="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-slate-700 transition-colors space-y-3">
+              <div className="p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-400 hover:shadow-md transition-all space-y-3">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs">
                   <div className="flex items-center gap-2">
                     <span
-                      className={`font-semibold uppercase tracking-wider text-[11px] ${
-                        item.type === 'education' ? 'text-blue-400' : 'text-amber-400'
+                      className={`font-bold uppercase tracking-wider text-[11px] px-2.5 py-0.5 rounded-full ${
+                        item.type === 'education' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-900'
                       }`}
                     >
-                      {item.type === 'education' ? 'Academic Degree' : 'Skill Training'}
+                      {item.type === 'education' ? 'একাডেমিক ডিগ্রি' : 'প্রফেশনাল স্কিল কোর্স'}
                     </span>
-                    <span aria-hidden="true" className="text-slate-600">·</span>
-                    <span className="text-slate-400">{item.yearOrPeriod}</span>
+                    <span aria-hidden="true" className="text-slate-300">·</span>
+                    <span className="text-slate-500 font-medium">{item.yearOrPeriod}</span>
                   </div>
-                  <span className="font-mono text-amber-400 font-semibold">{t(item.result)}</span>
+                  <span className="font-bold text-[#006a4e] bg-emerald-50 px-3 py-1 rounded-lg border border-emerald-200">
+                    {t(item.result)}
+                  </span>
                 </div>
 
-                <h3 className="text-lg font-bold font-display text-white">
+                <h3 className="text-lg font-bold font-display text-slate-900">
                   {t(item.degree)}
                 </h3>
 
-                <h4 className="text-xs font-semibold text-slate-300">
+                <h4 className="text-xs font-semibold text-slate-600">
                   {t(item.institution)}
                 </h4>
 
-                <p className="text-xs text-slate-400 leading-relaxed pt-1">
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed pt-1">
                   {t(item.details)}
                 </p>
               </div>
@@ -215,11 +225,11 @@ export const AboutMePage: React.FC<AboutMePageProps> = ({
       {/* 3. Skills Matrix */}
       <section className="space-y-6">
         <div>
-          <h2 className="text-2xl font-bold font-display text-white tracking-tight">
-            Core Competencies &amp; Technical Tools
+          <h2 className="text-2xl font-bold font-display text-slate-900 tracking-tight">
+            দক্ষতা ও প্রযুক্তিগত টুলস
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
-            Proficiencies across calligraphy, design, video editing, and digital advertising.
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            ক্যালিগ্রাফি, গ্রাফিক্স ডিজাইন, ভিডিও এডিটিং ও ডিজিটাল বিজ্ঞাপনে বাস্তব কর্মদক্ষতা।
           </p>
         </div>
 
@@ -227,20 +237,20 @@ export const AboutMePage: React.FC<AboutMePageProps> = ({
           {skills.map((skill) => (
             <div
               key={skill.id}
-              className="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2"
+              className="p-5 rounded-2xl bg-white border border-slate-200 hover:shadow-sm space-y-2.5"
             >
               <div className="flex items-center justify-between text-xs">
-                <span className="font-semibold text-slate-200">{skill.name}</span>
-                <span className="font-mono text-amber-400 tabular-nums">{skill.proficiency}%</span>
+                <span className="font-bold text-slate-900">{skill.name}</span>
+                <span className="font-mono text-[#006a4e] font-bold tabular-nums">{skill.proficiency}%</span>
               </div>
-              <div className="w-full h-1.5 bg-slate-950 rounded-full overflow-hidden">
+              <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-amber-500 to-amber-300 rounded-full"
+                  className="h-full bg-gradient-to-r from-[#006a4e] to-[#059669] rounded-full transition-all duration-1000"
                   style={{ width: `${skill.proficiency}%` }}
                 />
               </div>
               {skill.badge && (
-                <span className="text-[10px] text-slate-400 block pt-0.5">
+                <span className="text-[10px] font-semibold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-md inline-block">
                   {skill.badge}
                 </span>
               )}
@@ -252,11 +262,11 @@ export const AboutMePage: React.FC<AboutMePageProps> = ({
       {/* 4. Services Overview */}
       <section className="space-y-6">
         <div>
-          <h2 className="text-2xl font-bold font-display text-white tracking-tight">
-            Offered Professional Services
+          <h2 className="text-2xl font-bold font-display text-slate-900 tracking-tight">
+            প্রস্তাবিত পেশাদার সেবাসমূহ
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
-            Tailored creative solutions for individuals, businesses, and institutions.
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            ব্যক্তি, প্রতিষ্ঠান এবং ব্যবসার জন্য কাস্টমাইজড নান্দনিক ও কার্যকর সমাধান।
           </p>
         </div>
 
@@ -264,32 +274,34 @@ export const AboutMePage: React.FC<AboutMePageProps> = ({
           {services.map((srv) => (
             <div
               key={srv.id}
-              className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4 flex flex-col justify-between"
+              className="p-6 rounded-2xl bg-white border border-slate-200 hover:border-[#006a4e] hover:shadow-md transition-all space-y-4 flex flex-col justify-between"
             >
-              <div className="space-y-2">
-                <h3 className="text-lg font-bold font-display text-white">
+              <div className="space-y-3">
+                <h3 className="text-lg font-bold font-display text-slate-900">
                   {t(srv.title)}
                 </h3>
-                <p className="text-xs text-slate-300 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
                   {t(srv.shortDesc)}
                 </p>
-                <div className="pt-2 space-y-1.5">
+                <div className="pt-2 space-y-2">
                   {srv.features.map((feat, fIdx) => (
-                    <div key={fIdx} className="flex items-center gap-2 text-xs text-slate-400">
-                      <CheckCircle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                    <div key={fIdx} className="flex items-center gap-2 text-xs text-slate-700">
+                      <CheckCircle className="w-4 h-4 text-[#006a4e] shrink-0" />
                       <span>{t(feat)}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
-                <span className="text-xs text-slate-400">{srv.startingPrice || 'Flexible Packages'}</span>
+              <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                <span className="text-xs font-semibold text-[#006a4e] bg-emerald-50 px-2.5 py-1 rounded-md">
+                  {srv.startingPrice || 'সুলভ ও মানসম্পন্ন'}
+                </span>
                 <button
-                  onClick={() => onOpenInquiry(srv.category, `Inquiry regarding: ${t(srv.title)}`)}
-                  className="text-xs font-semibold text-amber-400 hover:underline flex items-center gap-1"
+                  onClick={() => onOpenInquiry(srv.category, `সেবা আলোচনা: ${t(srv.title)}`)}
+                  className="text-xs font-bold text-[#006a4e] hover:underline flex items-center gap-1"
                 >
-                  Book Service &rarr;
+                  বুক করুন &rarr;
                 </button>
               </div>
             </div>

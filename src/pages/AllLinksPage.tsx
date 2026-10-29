@@ -20,6 +20,7 @@ import {
   Instagram,
   Linkedin,
   Sparkles,
+  Phone,
 } from 'lucide-react';
 
 interface AllLinksPageProps {
@@ -80,11 +81,11 @@ export const AllLinksPage: React.FC<AllLinksPageProps> = ({
   const visibleLinks = links.filter((l) => l.showOnLinksPage && l.isVisible);
 
   return (
-    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12 space-y-10 pb-24">
-      {/* Bio & Link Hub Header */}
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 py-10 space-y-8 pb-24 text-slate-800">
+      {/* Bio & Link Hub Header (As-Sunnah Style) */}
       <div className="text-center space-y-4">
         <div className="relative inline-block">
-          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-2 border-amber-500/40 p-1 mx-auto bg-slate-950 shadow-xl">
+          <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-4 border-emerald-500/40 p-1 mx-auto bg-white shadow-lg">
             <img
               src={profile.avatarUrl}
               alt={t(profile.name)}
@@ -92,69 +93,53 @@ export const AllLinksPage: React.FC<AllLinksPageProps> = ({
               className="w-full h-full object-cover rounded-full"
             />
           </div>
-          <div className="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-emerald-500 border-2 border-slate-950 flex items-center justify-center text-[10px] text-white" title="Available for projects">
+          <div className="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-[#006a4e] border-2 border-white flex items-center justify-center text-[10px] text-white shadow-xs" title="নতুন কাজের জন্য উন্মুক্ত">
             ✓
           </div>
         </div>
 
         <div className="space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-bold font-display text-white tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-bold font-display text-slate-900 tracking-tight">
             {t(profile.name)}
           </h1>
-          <p className="text-xs sm:text-sm font-medium text-amber-400">
+          <p className="text-xs sm:text-sm font-semibold text-[#006a4e]">
             {t(profile.title)}
           </p>
-          <p className="text-xs text-slate-400 max-w-md mx-auto pt-1 leading-relaxed">
-            {t(profile.tagline)}
+          <p className="text-xs text-slate-600 max-w-md mx-auto pt-1">
+            আস-সুন্নাহ স্কিল ডেভেলপমেন্ট ইনস্টিটিউট থেকে প্রশিক্ষিত গ্রাফিক্স ডিজাইনার, ভিডিও এডিটর ও মেটা বিজ্ঞাপন বিশেষজ্ঞ।
           </p>
         </div>
 
-        {/* Global Page Share & QR buttons */}
-        <div className="flex items-center justify-center gap-3 pt-2">
-          <button
-            onClick={() => onOpenQrModal(window.location.href, `${t(profile.name)} — Link Hub`)}
-            className="px-3.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-700/80 rounded-xl transition-colors flex items-center gap-1.5"
-          >
-            <QrCode className="w-3.5 h-3.5 text-amber-400" />
-            <span>{ui.qrCode}</span>
-          </button>
-
+        {/* Quick Contact & Share buttons */}
+        <div className="flex items-center justify-center gap-2 pt-2">
           <button
             onClick={handleSharePage}
-            className="px-3.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-700/80 rounded-xl transition-colors flex items-center gap-1.5"
+            className="px-3.5 py-1.5 rounded-xl bg-white border border-slate-200 hover:border-emerald-400 text-xs text-slate-700 font-semibold shadow-xs flex items-center gap-1.5 transition-colors"
           >
-            {copiedPage ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5 text-amber-400" />}
-            <span>{copiedPage ? ui.copied : 'Share Link Hub'}</span>
+            {copiedPage ? <Check className="w-3.5 h-3.5 text-[#006a4e]" /> : <Share2 className="w-3.5 h-3.5 text-[#006a4e]" />}
+            <span>{copiedPage ? 'লিঙ্ক কপি হয়েছে' : 'প্রোফাইল শেয়ার'}</span>
+          </button>
+
+          <button
+            onClick={() => onOpenInquiry('general')}
+            className="px-4 py-1.5 rounded-xl bg-[#006a4e] hover:bg-[#00543c] text-white text-xs font-bold shadow-xs transition-colors flex items-center gap-1.5"
+          >
+            <Phone className="w-3.5 h-3.5" />
+            <span>সরাসরি যোগাযোগ</span>
           </button>
         </div>
       </div>
 
-      {/* Direct Contact Action Card */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-500/15 via-slate-900 to-slate-950 border border-amber-500/30 flex items-center justify-between gap-4">
-        <div className="space-y-0.5">
-          <span className="text-[11px] font-semibold text-amber-400 uppercase tracking-wider block">
-            Direct Project Collaboration
-          </span>
-          <span className="text-sm font-bold text-white block">
-            Have a project or commission in mind?
-          </span>
-        </div>
-        <button
-          onClick={() => onOpenInquiry()}
-          className="px-4 py-2 text-xs font-semibold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-lg transition-all shrink-0 active:scale-95"
-        >
-          {ui.contactMe}
-        </button>
-      </div>
-
-      {/* Links List */}
+      {/* Links Stack */}
       <div className="space-y-3">
         {visibleLinks.map((link) => {
           const Icon = getPlatformIcon(link.platform);
+          const isCopied = copiedId === link.id;
+
           return (
             <div
               key={link.id}
-              className="group relative p-4 rounded-xl bg-slate-900/90 hover:bg-slate-850 border border-slate-800 hover:border-amber-500/40 transition-all flex items-center justify-between gap-4 shadow-sm"
+              className="group relative rounded-2xl bg-white border border-slate-200 hover:border-[#006a4e] hover:shadow-md transition-all p-4 flex items-center justify-between gap-4"
             >
               <a
                 href={link.url}
@@ -162,65 +147,51 @@ export const AllLinksPage: React.FC<AllLinksPageProps> = ({
                 rel="noopener noreferrer"
                 className="flex items-center gap-3.5 flex-1 min-w-0"
               >
-                <div className="w-10 h-10 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-center text-amber-400 group-hover:scale-105 transition-transform shrink-0">
+                <div className="w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-[#006a4e] group-hover:scale-105 transition-transform shrink-0">
                   <Icon className="w-5 h-5" />
                 </div>
-                <div className="min-w-0 flex-1 text-left">
-                  <span className="text-sm font-bold text-white group-hover:text-amber-400 transition-colors block truncate">
+                <div className="min-w-0 flex-1">
+                  <span className="font-bold text-sm text-slate-900 group-hover:text-[#006a4e] transition-colors block truncate">
                     {link.title}
                   </span>
-                  {link.description && (
-                    <span className="text-xs text-slate-400 block truncate mt-0.5">
-                      {t(link.description)}
-                    </span>
-                  )}
+                  <span className="text-[11px] text-slate-500 truncate block">
+                    {(link.description ? t(link.description) : '') || link.url.replace(/^https?:\/\//, '')}
+                  </span>
                 </div>
               </a>
 
-              {/* Action Buttons: Copy link & QR */}
+              {/* Utility actions: Copy & QR */}
               <div className="flex items-center gap-1 shrink-0">
                 <button
                   onClick={(e) => handleCopyLink(link.url, link.id, e)}
-                  className="p-2 text-slate-400 hover:text-white bg-slate-950/60 hover:bg-slate-800 rounded-lg transition-colors border border-slate-800/80"
-                  title="Copy Link"
-                  aria-label="Copy link URL"
+                  className="p-2 text-slate-400 hover:text-[#006a4e] rounded-lg hover:bg-emerald-50 transition-colors"
+                  title="লিঙ্ক কপি করুন"
                 >
-                  {copiedId === link.id ? (
-                    <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  {isCopied ? (
+                    <Check className="w-4 h-4 text-[#006a4e]" />
                   ) : (
-                    <Copy className="w-3.5 h-3.5" />
+                    <Copy className="w-4 h-4" />
                   )}
                 </button>
-
                 <button
                   onClick={() => onOpenQrModal(link.url, link.title)}
-                  className="p-2 text-slate-400 hover:text-white bg-slate-950/60 hover:bg-slate-800 rounded-lg transition-colors border border-slate-800/80"
-                  title="Show QR Code"
-                  aria-label="View QR code"
+                  className="p-2 text-slate-400 hover:text-[#006a4e] rounded-lg hover:bg-emerald-50 transition-colors"
+                  title="QR কোড প্রদর্শন"
                 >
-                  <QrCode className="w-3.5 h-3.5" />
+                  <QrCode className="w-4 h-4" />
                 </button>
-
                 <a
                   href={link.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2 text-slate-400 hover:text-amber-400 bg-slate-950/60 hover:bg-slate-800 rounded-lg transition-colors border border-slate-800/80"
-                  title="Open Link"
-                  aria-label="Open link in new tab"
+                  className="p-2 text-slate-400 hover:text-[#006a4e] rounded-lg hover:bg-emerald-50 transition-colors"
                 >
-                  <ExternalLink className="w-3.5 h-3.5" />
+                  <ExternalLink className="w-4 h-4" />
                 </a>
               </div>
             </div>
           );
         })}
-      </div>
-
-      {/* Quiet Credentials Trust Footer */}
-      <div className="pt-8 text-center text-xs text-slate-500 border-t border-slate-800/80 space-y-1">
-        <p>Verified Creative &amp; Arabic Calligraphy Portfolio · Dhaka, Bangladesh</p>
-        <p>Dawra-e-Hadith (Ashraful Ulum Kushtia) · As-Sunnah Skill Development Institute Graduate</p>
       </div>
     </div>
   );

@@ -12,6 +12,7 @@ import {
   ShieldCheck,
   Calendar,
   Layers,
+  Send,
 } from 'lucide-react';
 
 interface MetaMarketingPageProps {
@@ -37,219 +38,195 @@ export const MetaMarketingPage: React.FC<MetaMarketingPageProps> = ({
   const marketingServices = services.filter((s) => s.category === 'meta_marketing');
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16 pb-24">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-14 pb-24 text-slate-800">
       {/* Page Header */}
-      <div className="space-y-4 max-w-3xl">
-        <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400 uppercase tracking-wider">
-          <TrendingUp className="w-4 h-4" />
-          <span>Meta Advertising &amp; Growth Strategy</span>
+      <div className="space-y-3 max-w-3xl">
+        <div className="flex items-center gap-2 text-xs font-bold text-[#006a4e] uppercase tracking-wider">
+          <TrendingUp className="w-4 h-4 text-[#006a4e]" />
+          <span>আস-সুন্নাহ স্কিল ডেভেলপমেন্ট ইনস্টিটিউট প্রশিক্ষিত</span>
         </div>
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-display text-white tracking-tight">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-display text-slate-900 tracking-tight">
           {ui.metaMarketing}
         </h1>
-        <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-          Trained at As-Sunnah Skill Development Institute, I develop data-backed Meta Ads architectures (Facebook &amp; Instagram). Laser-focused audience targeting, creative testing, and ROAS scaling without ad spend waste.
+        <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+          ফেসবুক ও ইনস্টাগ্রামের জন্য ফলাফলভিত্তিক বিজ্ঞাপন প্রচারণা। নিখুঁত অডিয়েন্স রিসার্চ, মেটা পিক্সেল ও কনভার্সন এপিআই সেটআপ, ক্রিয়েটিভ টেস্টিং এবং সর্বোচ্চ ROAS নিশ্চিতকরণ।
         </p>
       </div>
 
-      {/* Strategic Capabilities Breakdown */}
+      {/* Strategic Capabilities Breakdown (Clean White Cards) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
-            <Target className="w-5 h-5" />
+        <div className="p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-400 hover:shadow-md transition-all space-y-3">
+          <div className="w-12 h-12 rounded-xl bg-emerald-50 text-[#006a4e] flex items-center justify-center">
+            <Target className="w-6 h-6" />
           </div>
-          <h3 className="text-base font-bold font-display text-white">
-            Audience Architecture &amp; Pixel Setup
+          <h3 className="text-base font-bold font-display text-slate-900">
+            অডিয়েন্স আর্কিটেকচার ও পিক্সেল সেটআপ
           </h3>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Laser-precise demographic segmentation, interest clustering, Conversions API, and custom lookalike modeling.
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            লেজার-টার্গেটিং, ডেমোগ্রাফিক সেগমেন্টেশন, লুকঅ্যালাইক অডিয়েন্স ও মেটা কনভার্সন ট্র্যাকিং।
           </p>
         </div>
 
-        <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center">
-            <Layers className="w-5 h-5" />
+        <div className="p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-400 hover:shadow-md transition-all space-y-3">
+          <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-700 flex items-center justify-center">
+            <Layers className="w-6 h-6" />
           </div>
-          <h3 className="text-base font-bold font-display text-white">
-            Full-Funnel Creative Strategy
+          <h3 className="text-base font-bold font-display text-slate-900">
+            ফুল-ফানেল ক্রিয়েটিভ স্ট্র্যাটেজি
           </h3>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Hook-driven video creatives, social proof carousels, and dynamic catalog ads orchestrated from cold prospect to repeat buyer.
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            আকর্ষণীয় ভিডিও হুক, সোশ্যাল প্রুফ ক্যারোসেল ও হাই-কনভার্টিং ক্যাটালগ বিজ্ঞাপন।
           </p>
         </div>
 
-        <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
-          <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center">
-            <BarChart3 className="w-5 h-5" />
+        <div className="p-6 rounded-2xl bg-white border border-slate-200 hover:border-emerald-400 hover:shadow-md transition-all space-y-3">
+          <div className="w-12 h-12 rounded-xl bg-teal-50 text-teal-700 flex items-center justify-center">
+            <BarChart3 className="w-6 h-6" />
           </div>
-          <h3 className="text-base font-bold font-display text-white">
-            ROAS Optimization &amp; Scaling
+          <h3 className="text-base font-bold font-display text-slate-900">
+            ROAS অপ্টিমাইজেশন ও বাজেট স্কেলিং
           </h3>
-          <p className="text-xs text-slate-400 leading-relaxed">
-            Continuous A/B budget distribution, Cost Per Purchase (CPP) compression, and clear, transparent performance reporting.
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+            বিজ্ঞাপনী বাজেটের সঠিক বণ্টন, প্রতি ক্রয়ে খরচ কমানো এবং স্বচ্ছ পারফরম্যান্স অ্যানালিটিক্স।
           </p>
         </div>
       </div>
 
       {/* Case Studies Section */}
-      <section className="space-y-8">
-        <div>
-          <h2 className="text-2xl sm:text-3xl font-bold font-display text-white tracking-tight">
-            Verified Case Studies &amp; Performance
-          </h2>
-          <p className="text-xs text-slate-400 mt-1">
-            Real campaigns, structured funnels, and verified analytical outcomes.
-          </p>
-        </div>
-
-        {marketingCases.length === 0 ? (
-          <p className="text-xs text-slate-400">No case studies published yet.</p>
-        ) : (
-          <div className="space-y-8">
-            {marketingCases.map((cs) => (
-              <div
-                key={cs.id}
-                className="p-6 sm:p-8 rounded-2xl bg-slate-900 border border-slate-800 space-y-6"
-              >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
-                  <div>
-                    <div className="flex items-center gap-2 text-xs text-slate-400">
-                      <span className="font-semibold text-slate-300">Client: {cs.client}</span>
-                      <span aria-hidden="true">·</span>
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-3 h-3 text-slate-500" />
-                        {cs.campaignPeriod}
-                      </span>
-                    </div>
-                    <h3 className="text-xl font-bold font-display text-white mt-1">
-                      {t(cs.title)}
-                    </h3>
-                  </div>
-
-                  <button
-                    onClick={() => onOpenInquiry('meta_marketing', `Interested in campaign strategy like: ${t(cs.title)}`)}
-                    className="px-4 py-2 text-xs font-semibold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-lg transition-colors whitespace-nowrap self-start sm:self-auto"
-                  >
-                    Discuss Similar Campaign
-                  </button>
-                </div>
-
-                {/* Metrics strip */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  {cs.metrics.map((m, idx) => (
-                    <div key={idx} className="p-4 rounded-xl bg-slate-950 border border-slate-800">
-                      <span className="text-2xl font-bold font-display text-amber-400 tabular-nums block">
-                        {m.metric}
-                      </span>
-                      <span className="text-xs text-slate-300 font-medium block mt-1">
-                        {t(m.label)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Objective & Strategy details */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-slate-300">
-                  <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800/80 space-y-1.5">
-                    <span className="font-bold text-slate-200 block text-xs uppercase tracking-wider">
-                      {ui.objective}
-                    </span>
-                    <p className="leading-relaxed text-slate-400">
-                      {t(cs.objective)}
-                    </p>
-                  </div>
-
-                  <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800/80 space-y-1.5">
-                    <span className="font-bold text-slate-200 block text-xs uppercase tracking-wider">
-                      {ui.strategy}
-                    </span>
-                    <p className="leading-relaxed text-slate-400">
-                      {t(cs.strategy)}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Screenshots */}
-                {cs.screenshots && cs.screenshots.length > 0 && (
-                  <div>
-                    <span className="text-xs font-medium text-slate-400 block mb-2">
-                      Verified Campaign Analytics Snapshot:
-                    </span>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      {cs.screenshots.map((img, sIdx) => (
-                        <div
-                          key={sIdx}
-                          onClick={() =>
-                            onOpenLightbox({
-                              title: cs.title,
-                              image: img,
-                              description: cs.objective,
-                              client: cs.client,
-                            })
-                          }
-                          className="relative aspect-[16/10] rounded-xl overflow-hidden border border-slate-800 bg-black cursor-pointer group"
-                        >
-                          <img
-                            src={img}
-                            alt="Campaign Analytics Snapshot"
-                            referrerPolicy="no-referrer"
-                            className="w-full h-full object-cover group-hover:scale-102 transition-transform"
-                          />
-                          <div className="absolute inset-0 bg-black/30 group-hover:bg-transparent transition-colors flex items-center justify-center">
-                            <span className="text-xs font-medium text-white px-3 py-1 bg-black/70 rounded-lg">
-                              Click to Enlarge
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </section>
-
-      {/* Testimonials */}
       <section className="space-y-6">
         <div>
-          <h2 className="text-2xl sm:text-3xl font-bold font-display text-white tracking-tight">
-            {ui.testimonials}
+          <h2 className="text-2xl sm:text-3xl font-bold font-display text-slate-900 tracking-tight">
+            বাস্তব কেস স্টাডি ও বিজ্ঞাপনী ফলাফল
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
-            Genuine feedback and ratings from business owners and collaborators.
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            সত্যায়িত ও ক্লায়েন্ট-অনুমোদিত ফলাফলসমূহ।
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {testimonials.map((test) => (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Case Studies List */}
+          <div className="lg:col-span-5 space-y-4">
+            {marketingCases.map((c) => {
+              const isSelected = selectedCase?.id === c.id;
+              return (
+                <div
+                  key={c.id}
+                  onClick={() => setSelectedCase(c)}
+                  className={`p-5 rounded-2xl border cursor-pointer transition-all ${
+                    isSelected
+                      ? 'bg-emerald-50/70 border-[#006a4e] shadow-sm'
+                      : 'bg-white border-slate-200 hover:bg-slate-50'
+                  }`}
+                >
+                  <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
+                    <span className="font-bold text-[#006a4e]">{c.client}</span>
+                    <span className="font-mono">{c.campaignPeriod}</span>
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900">
+                    {t(c.title)}
+                  </h3>
+                  <p className="text-xs text-slate-600 line-clamp-2 mt-1">
+                    {t(c.objective)}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Active Case Details */}
+          {selectedCase && (
+            <div className="lg:col-span-7 p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-md space-y-6">
+              <div className="border-b border-slate-100 pb-4">
+                <span className="text-xs font-bold text-[#006a4e] font-mono uppercase">
+                  কেস স্টাডি · {selectedCase.client}
+                </span>
+                <h3 className="text-xl sm:text-2xl font-bold font-display text-slate-900 mt-1">
+                  {t(selectedCase.title)}
+                </h3>
+              </div>
+
+              {/* Metrics Highlights */}
+              <div className="grid grid-cols-3 gap-3">
+                {selectedCase.metrics.map((m, idx) => (
+                  <div key={idx} className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-100 text-center">
+                    <span className="text-2xl font-bold font-display text-[#006a4e] tabular-nums block">
+                      {m.metric}
+                    </span>
+                    <span className="text-[11px] text-slate-700 font-semibold block mt-1">
+                      {t(m.label)}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Strategy & Outcome */}
+              <div className="space-y-4 text-xs sm:text-sm text-slate-600 leading-relaxed">
+                <div>
+                  <h4 className="font-bold text-slate-900 mb-1">মূল লক্ষ্য:</h4>
+                  <p>{t(selectedCase.objective)}</p>
+                </div>
+                <div>
+                  <h4 className="font-bold text-slate-900 mb-1">প্রযুক্তিকৌশল:</h4>
+                  <p>{t(selectedCase.strategy)}</p>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                <button
+                  onClick={() =>
+                    onOpenInquiry(
+                      'meta_marketing',
+                      `আমি "${selectedCase.client}" কেস স্টাডির মতো আমার ব্যবসার জন্যও মেটা বিজ্ঞাপন পরিচালনা করতে চাই।`
+                    )
+                  }
+                  className="px-5 py-2.5 text-xs font-bold text-white bg-[#006a4e] hover:bg-[#00543c] rounded-xl transition-all shadow-xs flex items-center gap-1.5"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  <span>ক্যাম্পেইন আলোচনা করুন</span>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Testimonials Review Section */}
+      <section className="space-y-6">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-bold font-display text-slate-900 tracking-tight">
+            ক্লায়েন্ট রিভিউ ও ফিডব্যাক
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
+            সরাসরি ভেরিফায়েড ক্লায়েন্টদের সন্তোষজনক মতামত।
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {testimonials.map((tItem) => (
             <div
-              key={test.id}
-              className="p-6 rounded-2xl bg-slate-900 border border-slate-800 space-y-4 flex flex-col justify-between"
+              key={tItem.id}
+              className="p-6 rounded-2xl bg-white border border-slate-200 hover:shadow-md transition-all flex flex-col justify-between"
             >
               <div className="space-y-3">
-                <div className="flex items-center gap-1 text-amber-400">
-                  {[...Array(test.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-amber-400" />
+                <div className="flex items-center gap-1">
+                  {[...Array(tItem.rating || 5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                   ))}
                 </div>
-                <p className="text-sm text-slate-200 leading-relaxed italic">
-                  "{t(test.quote)}"
+                <p className="text-xs sm:text-sm text-slate-700 italic leading-relaxed">
+                  "{t(tItem.quote)}"
                 </p>
               </div>
 
-              <div className="pt-4 border-t border-slate-800 flex items-center justify-between text-xs">
+              <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between text-xs">
                 <div>
-                  <span className="font-bold text-white block">{test.clientName}</span>
-                  <span className="text-slate-400">
-                    {test.clientRole} {test.clientCompany && `· ${test.clientCompany}`}
-                  </span>
+                  <span className="font-bold text-slate-900 block">{tItem.clientName}</span>
+                  <span className="text-slate-500 text-[11px]">{tItem.clientRole}</span>
                 </div>
-                {test.verified && (
-                  <span className="text-[11px] text-amber-400 font-medium flex items-center gap-1">
+                {tItem.verified && (
+                  <span className="inline-flex items-center gap-1 text-[11px] font-bold text-[#006a4e]">
                     <CheckCircle className="w-3.5 h-3.5" />
-                    {ui.verifiedReview}
+                    ভেরিফায়েড
                   </span>
                 )}
               </div>
@@ -257,24 +234,6 @@ export const MetaMarketingPage: React.FC<MetaMarketingPageProps> = ({
           ))}
         </div>
       </section>
-
-      {/* Inquiry Banner */}
-      <div className="p-8 rounded-2xl bg-slate-900 border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h3 className="text-lg font-bold font-display text-white">
-            Want to scale your business with profitable Meta Ads?
-          </h3>
-          <p className="text-xs text-slate-400 mt-1">
-            Let's evaluate your audience, audit your ad account, and launch a tailored campaign.
-          </p>
-        </div>
-        <button
-          onClick={() => onOpenInquiry('meta_marketing')}
-          className="px-5 py-2.5 text-xs font-semibold text-slate-950 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all shrink-0 self-start sm:self-auto"
-        >
-          {ui.contactMe}
-        </button>
-      </div>
     </div>
   );
 };
