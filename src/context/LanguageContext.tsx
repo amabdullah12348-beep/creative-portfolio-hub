@@ -273,17 +273,17 @@ const UI_DICTIONARY: Record<Language, Record<string, string>> = {
 };
 
 const LanguageContext = createContext<LanguageContextType>({
-  lang: 'bn',
+  lang: 'en',
   setLanguage: () => {},
   isRtl: false,
   t: () => '',
-  ui: UI_DICTIONARY['bn'],
+  ui: UI_DICTIONARY['en'],
 });
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [lang, setLangState] = useState<Language>(() => {
     const saved = localStorage.getItem('portfolio_lang') as Language;
-    return saved && ['bn', 'en', 'ar', 'ur'].includes(saved) ? saved : 'bn';
+    return saved && ['bn', 'en', 'ar', 'ur'].includes(saved) ? saved : 'en';
   });
 
   const isRtl = lang === 'ar' || lang === 'ur';

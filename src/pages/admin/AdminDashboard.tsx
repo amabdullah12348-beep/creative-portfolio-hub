@@ -61,7 +61,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 }) => {
   const { isAdmin, login, logout } = useAuth();
   const { theme, updateTheme, resetTheme } = useTheme();
-  const { ui, lang } = useLanguage();
+  const { ui, lang, setLanguage } = useLanguage();
 
   // Auth state
   const [loginPassword, setLoginPassword] = useState('admin123');
@@ -354,6 +354,113 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     }
   };
 
+  // --- Video Project handlers ---
+  const handleAddVideoProject = async () => {
+    const newVid: Omit<VideoProject, 'id'> = {
+      slug: 'video-' + Date.now(),
+      title: { bn: 'নতুন ভিডিও প্রজেক্ট', en: 'New Video Project', ar: 'مشروع فيديو جديد', ur: 'نیا ویڈیو پروجیکٹ' },
+      category: 'Reels & Shorts',
+      description: { bn: 'ভিডিও বিবরণ...', en: 'Engaging video edit with professional sound design & color grading.', ar: 'وصف الفيديو...', ur: 'ویڈیو کی تفصیل...' },
+      videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      embedType: 'youtube',
+      thumbnail: profile.avatarUrl || '/src/assets/images/branding_identity_showcase_1793194734888.jpg',
+      duration: '01:30',
+      softwareUsed: ['Premiere Pro', 'After Effects'],
+      featured: true,
+      order: videoProjects.length + 1,
+      status: 'published',
+    };
+    try {
+      const saved = await api.createVideoProject(newVid);
+      setVideoProjects([...videoProjects, saved]);
+      showSuccess('Video project added successfully');
+    } catch (err: any) {
+      showError(err.message || 'Failed to add video');
+    }
+  };
+
+  const handleDeleteVideoProject = async (id: string) => {
+    if (!window.confirm('Delete this video project?')) return;
+    try {
+      await api.deleteVideoProject(id);
+      setVideoProjects(videoProjects.filter((v) => v.id !== id));
+      showSuccess('Video project deleted');
+    } catch (err: any) {
+      showError(err.message);
+    }
+  };
+
+  // --- Testimonial handlers ---
+  const handleAddTestimonial = async () => {
+    const newTest: Omit<Testimonial, 'id'> = {
+      clientName: 'New Client / Business',
+      clientRole: 'CEO / Project Director',
+      clientCompany: 'Creative Agency',
+      quote: { bn: 'অত্যন্ত আকর্ষণীয় ও প্রশংসনীয় কাজ।', en: 'Outstanding work delivered with supreme aesthetic precision and punctuality.', ar: 'عمل رائع ومتميز.', ur: 'انتہائی شاندار کام۔' },
+      projectType: 'Brand Design',
+      rating: 5,
+      verified: true,
+      order: testimonials.length + 1,
+      status: 'published',
+    };
+    try {
+      const saved = await api.createTestimonial(newTest);
+      setTestimonials([...testimonials, saved]);
+      showSuccess('Client review added successfully');
+    } catch (err: any) {
+      showError(err.message || 'Failed to add review');
+    }
+  };
+
+  const handleDeleteTestimonial = async (id: string) => {
+    if (!window.confirm('Delete this review?')) return;
+    try {
+      await api.deleteTestimonial(id);
+      setTestimonials(testimonials.filter((t) => t.id !== id));
+      showSuccess('Review deleted');
+    } catch (err: any) {
+      showError(err.message);
+    }
+  };
+
+  // --- Multiple Photo Upload handler ---
+  const handleMultiplePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    showSuccess(`Uploading ${files.length} photo(s)...`);
+    const newMediaAssets: MediaAsset[] = [];
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      try {
+        const base64 = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+
+        const uploaded = await api.uploadMedia({
+          fileName: file.name,
+          fileData: base64,
+          mimeType: file.type,
+          altText: file.name.replace(/\.[^/.]+$/, ''),
+        });
+        newMediaAssets.push(uploaded);
+      } catch (err: any) {
+        console.error('Error uploading file:', file.name, err);
+      }
+    }
+
+    if (newMediaAssets.length > 0) {
+      setMedia((prev) => [...newMediaAssets, ...prev]);
+      showSuccess(`Successfully uploaded ${newMediaAssets.length} photo(s)!`);
+    } else {
+      showError('Failed to upload photos.');
+    }
+  };
+
   // --- Database Export / Import ---
   const handleExportJson = async () => {
     try {
@@ -510,26 +617,45 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8 pb-28">
-      {/* Top Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl bg-slate-900 border border-slate-800">
+      {/* Top Banner (As-Sunnah Clean Emerald Style) */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 p-5 rounded-3xl bg-white border border-slate-200/90 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 font-bold">
+          <div className="w-12 h-12 rounded-2xl bg-[#006a4e] flex items-center justify-center text-amber-300 font-bold text-lg shadow-sm">
             CMS
           </div>
           <div>
-            <h1 className="text-lg font-bold font-display text-white">
-              CMS Dashboard &amp; Direct Editor
+            <h1 className="text-xl font-bold font-display text-slate-900">
+              Admin CMS Dashboard &amp; Direct Editor
             </h1>
-            <p className="text-xs text-slate-400">
-              Logged in as Administrator · Edit any text or image directly from your browser
+            <p className="text-xs text-slate-500">
+              Edit text, multiple images, videos, calligraphy, and links directly from your browser.
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-3 self-start sm:self-auto">
+        {/* Action Controls & Language Selector */}
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Site Language Switcher inside Admin */}
+          <div className="flex items-center gap-1 bg-slate-50 p-1 rounded-xl border border-slate-200 text-xs">
+            <span className="text-[11px] font-bold text-slate-600 px-2">Site Language:</span>
+            {(['en', 'bn', 'ar', 'ur'] as const).map((l) => (
+              <button
+                key={l}
+                onClick={() => setLanguage(l)}
+                className={`px-2.5 py-1 text-xs font-bold rounded-lg transition-colors ${
+                  lang === l
+                    ? 'bg-[#006a4e] text-white shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200'
+                }`}
+              >
+                {l === 'en' ? 'English (Default)' : l === 'bn' ? 'বাংলা' : l === 'ar' ? 'العربية' : 'اردو'}
+              </button>
+            ))}
+          </div>
+
           <button
             onClick={onNavigateHome}
-            className="px-3.5 py-1.5 text-xs font-medium text-slate-300 hover:text-white bg-slate-950 border border-slate-800 rounded-lg transition-colors flex items-center gap-1.5"
+            className="px-4 py-2 text-xs font-bold text-[#006a4e] bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 rounded-xl transition-colors flex items-center gap-1.5"
           >
             <ExternalLink className="w-3.5 h-3.5" />
             <span>View Public Site</span>
@@ -537,7 +663,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
           <button
             onClick={logout}
-            className="px-3.5 py-1.5 text-xs font-semibold text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 rounded-lg transition-colors flex items-center gap-1.5"
+            className="px-3.5 py-2 text-xs font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 rounded-xl transition-colors flex items-center gap-1.5"
           >
             <LogOut className="w-3.5 h-3.5" />
             <span>Sign Out</span>
@@ -547,13 +673,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
       {/* Status Toasts */}
       {saveStatus && (
-        <div className="p-3.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2 animate-fade-in shadow-lg">
-          <Check className="w-4 h-4 shrink-0" />
-          <span className="font-semibold">{saveStatus}</span>
+        <div className="p-3.5 rounded-xl bg-emerald-100 border border-emerald-300 text-emerald-900 text-xs flex items-center gap-2 animate-fade-in shadow-xs">
+          <Check className="w-4 h-4 text-[#006a4e] shrink-0" />
+          <span className="font-bold">{saveStatus}</span>
         </div>
       )}
       {errorMessage && (
-        <div className="p-3.5 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2 animate-fade-in shadow-lg">
+        <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-300 text-rose-800 text-xs flex items-center gap-2 animate-fade-in shadow-xs">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{errorMessage}</span>
         </div>
@@ -562,17 +688,17 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       {/* Tabs Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Sidebar Nav */}
-        <div className="lg:col-span-3 space-y-1 bg-slate-900/60 p-2 rounded-2xl border border-slate-800">
+        <div className="lg:col-span-3 space-y-1 bg-white p-3 rounded-2xl border border-slate-200/90 shadow-sm">
           {navTabs.map((tab) => {
             const Icon = tab.icon;
             return (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-medium transition-colors text-left ${
+                className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all text-left ${
                   activeTab === tab.id
-                    ? 'bg-amber-400 text-slate-950 font-bold shadow-sm'
-                    : 'text-slate-300 hover:bg-slate-800/80 hover:text-white'
+                    ? 'bg-[#006a4e] text-white shadow-xs'
+                    : 'text-slate-700 hover:bg-emerald-50 hover:text-[#006a4e]'
                 }`}
               >
                 <Icon className="w-4 h-4 shrink-0" />
@@ -583,7 +709,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
         </div>
 
         {/* Tab Content Panel */}
-        <div className="lg:col-span-9 bg-slate-900 p-6 sm:p-8 rounded-3xl border border-slate-800 shadow-xl space-y-8">
+        <div className="lg:col-span-9 bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/90 shadow-sm space-y-8 text-slate-800">
           {/* TAB 0: QUICK EDIT TEXT & IMAGES */}
           {activeTab === 'quick-edit' && (
             <div className="space-y-8">
@@ -1251,35 +1377,51 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           {/* TAB 4: VIDEO PROJECTS */}
           {activeTab === 'video' && (
             <div className="space-y-6">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+              <div className="flex items-center justify-between border-b border-slate-200 pb-4">
                 <div>
-                  <h2 className="text-xl font-bold font-display text-white">
+                  <h2 className="text-xl font-bold font-display text-slate-900">
                     Video Editing Projects
                   </h2>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-slate-500">
                     Manage video URLs, YouTube/Vimeo embeds, durations, and cover thumbnails.
                   </p>
                 </div>
+                <button
+                  onClick={handleAddVideoProject}
+                  className="px-4 py-2 text-xs font-bold text-white bg-[#006a4e] hover:bg-[#00543c] rounded-xl flex items-center gap-1.5 transition-all shadow-xs"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>+ Add Video Project</span>
+                </button>
               </div>
 
               <div className="space-y-6">
                 {videoProjects.map((v, idx) => (
-                  <div key={v.id} className="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-4">
+                  <div key={v.id} className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-purple-400">{v.category}</span>
-                      <button
-                        onClick={async () => {
-                          try {
-                            await api.updateVideoProject(v.id, v);
-                            showSuccess('Video project saved');
-                          } catch (e: any) {
-                            showError(e.message);
-                          }
-                        }}
-                        className="px-3 py-1 bg-amber-400 hover:bg-amber-300 text-slate-950 font-semibold text-xs rounded transition-colors"
-                      >
-                        Save
-                      </button>
+                      <span className="text-xs font-bold text-[#006a4e]">{v.category}</span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={async () => {
+                            try {
+                              await api.updateVideoProject(v.id, v);
+                              showSuccess('Video project saved');
+                            } catch (e: any) {
+                              showError(e.message);
+                            }
+                          }}
+                          className="px-3 py-1 bg-[#006a4e] hover:bg-[#00543c] text-white font-semibold text-xs rounded-lg transition-colors"
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={() => handleDeleteVideoProject(v.id)}
+                          className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors"
+                          title="Delete video"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -1322,6 +1464,182 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                       mediaAssets={media}
                       aspectRatio="video"
                     />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB: META MARKETING & REVIEWS */}
+          {activeTab === 'marketing' && (
+            <div className="space-y-8">
+              {/* Reviews & Testimonials Section */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+                  <div>
+                    <h2 className="text-xl font-bold font-display text-slate-900">
+                      Client Reviews &amp; Testimonials
+                    </h2>
+                    <p className="text-xs text-slate-500">
+                      Add, approve, and manage 5-star ratings and feedback displayed on the homepage.
+                    </p>
+                  </div>
+                  <button
+                    onClick={handleAddTestimonial}
+                    className="px-4 py-2 text-xs font-bold text-white bg-[#006a4e] hover:bg-[#00543c] rounded-xl flex items-center gap-1.5 transition-all shadow-xs"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>+ Add Client Review</span>
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  {testimonials.map((test, idx) => (
+                    <div key={test.id} className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-sm text-slate-900">{test.clientName}</span>
+                          <span className="text-xs text-slate-500">({test.clientRole})</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={async () => {
+                              try {
+                                await api.updateTestimonial(test.id, test);
+                                showSuccess('Review updated');
+                              } catch (e: any) {
+                                showError(e.message);
+                              }
+                            }}
+                            className="px-3 py-1 bg-[#006a4e] hover:bg-[#00543c] text-white font-semibold text-xs rounded-lg transition-colors"
+                          >
+                            Save
+                          </button>
+                          <button
+                            onClick={() => handleDeleteTestimonial(test.id)}
+                            className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-colors"
+                            title="Delete review"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">Client Name</label>
+                          <input
+                            type="text"
+                            value={test.clientName}
+                            onChange={(e) => {
+                              const updated = [...testimonials];
+                              updated[idx].clientName = e.target.value;
+                              setTestimonials(updated);
+                            }}
+                            className="w-full px-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg text-slate-900"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">Role / Company</label>
+                          <input
+                            type="text"
+                            value={test.clientRole}
+                            onChange={(e) => {
+                              const updated = [...testimonials];
+                              updated[idx].clientRole = e.target.value;
+                              setTestimonials(updated);
+                            }}
+                            className="w-full px-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg text-slate-900"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[11px] text-slate-600 mb-1">Rating (1 to 5 Stars)</label>
+                          <select
+                            value={test.rating}
+                            onChange={(e) => {
+                              const updated = [...testimonials];
+                              updated[idx].rating = parseInt(e.target.value, 10);
+                              setTestimonials(updated);
+                            }}
+                            className="w-full px-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg text-slate-900"
+                          >
+                            <option value="5">5 Stars (Excellent)</option>
+                            <option value="4">4 Stars</option>
+                            <option value="3">3 Stars</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] text-slate-600 mb-1">Review Quote / Testimonial</label>
+                        <textarea
+                          rows={2}
+                          value={test.quote.en}
+                          onChange={(e) => {
+                            const updated = [...testimonials];
+                            updated[idx].quote.en = e.target.value;
+                            setTestimonials(updated);
+                          }}
+                          className="w-full px-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg text-slate-900"
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Marketing Case Studies */}
+              <div className="space-y-4 pt-6 border-t border-slate-200">
+                <h3 className="text-lg font-bold font-display text-slate-900">
+                  Meta Marketing Case Studies &amp; High ROAS Campaigns
+                </h3>
+                {marketingCases.map((c, idx) => (
+                  <div key={c.id} className="p-5 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-sm text-[#006a4e]">{c.client}</span>
+                      <button
+                        onClick={async () => {
+                          try {
+                            await api.updateMarketingCase(c.id, c);
+                            showSuccess('Case study saved');
+                          } catch (e: any) {
+                            showError(e.message);
+                          }
+                        }}
+                        className="px-3 py-1 bg-[#006a4e] hover:bg-[#00543c] text-white font-semibold text-xs rounded-lg transition-colors"
+                      >
+                        Save Case
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[11px] text-slate-600 mb-1">Campaign Title</label>
+                        <input
+                          type="text"
+                          value={c.title.en}
+                          onChange={(e) => {
+                            const updated = [...marketingCases];
+                            updated[idx].title.en = e.target.value;
+                            setMarketingCases(updated);
+                          }}
+                          className="w-full px-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg text-slate-900"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] text-slate-600 mb-1">Campaign Period</label>
+                        <input
+                          type="text"
+                          value={c.campaignPeriod}
+                          onChange={(e) => {
+                            const updated = [...marketingCases];
+                            updated[idx].campaignPeriod = e.target.value;
+                            setMarketingCases(updated);
+                          }}
+                          className="w-full px-3 py-1.5 text-xs bg-white border border-slate-300 rounded-lg text-slate-900"
+                        />
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -1761,16 +2079,47 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           {/* TAB 9: MEDIA ASSETS & STORAGE */}
           {activeTab === 'media' && (
             <div className="space-y-6">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
                 <div>
-                  <h2 className="text-xl font-bold font-display text-white">
+                  <h2 className="text-xl font-bold font-display text-slate-900">
                     Media Storage &amp; Asset Management
                   </h2>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-slate-500">
                     Upload new photos, artwork scans, and logos directly to the persistent server storage.
                   </p>
                 </div>
+                <label className="cursor-pointer px-4 py-2.5 text-xs font-bold text-white bg-[#006a4e] hover:bg-[#00543c] rounded-xl flex items-center gap-2 transition-all shadow-md self-start sm:self-auto shrink-0">
+                  <Upload className="w-4 h-4" />
+                  <span>+ Upload Photos (Select Multiple)</span>
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={handleMultiplePhotoUpload}
+                    className="hidden"
+                  />
+                </label>
               </div>
+
+              {/* Upload Dropzone Banner */}
+              <label className="cursor-pointer block p-6 border-2 border-dashed border-emerald-300 hover:border-[#006a4e] bg-emerald-50/50 hover:bg-emerald-50 rounded-2xl text-center transition-all">
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={handleMultiplePhotoUpload}
+                  className="hidden"
+                />
+                <div className="w-12 h-12 rounded-xl bg-white text-[#006a4e] flex items-center justify-center mx-auto shadow-xs mb-2">
+                  <Upload className="w-6 h-6" />
+                </div>
+                <span className="block text-sm font-bold text-slate-900">
+                  Click to Browse or Drag Multiple Photos Here
+                </span>
+                <span className="text-xs text-slate-500 block mt-1">
+                  Supports JPG, PNG, WEBP, SVG · Upload as many photos as you need
+                </span>
+              </label>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                 {media.map((item) => (

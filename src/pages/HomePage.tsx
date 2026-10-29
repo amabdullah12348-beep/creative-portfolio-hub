@@ -32,7 +32,6 @@ import {
   PlusCircle,
   Check,
   Send,
-  Camera,
   Layers,
   ChevronRight,
 } from 'lucide-react';
@@ -73,85 +72,77 @@ export const HomePage: React.FC<HomePageProps> = ({
   const disciplineCards = [
     {
       id: 'arabic-calligraphy',
-      title: ui.arabicCalligraphy,
-      subtitle: 'শাস্ত্রীয় থুলুথ, দিওয়ানি ও নাসখ লিপি',
-      desc: '৪ বছরের বাস্তব শিল্পচর্চা। ঐতিহ্যবাহী বাঁশের কলম, ভুসাকালি ও ২৪ ক্যারেট খাঁটি স্বর্ণের পাতে তৈরি আরবি চারুলিপি ও ক্যালিগ্রাফি মাস্টারপিস।',
+      title: 'Arabic Calligraphy',
+      subtitle: 'Classical Thuluth, Diwani & Naskh Scripts',
+      desc: '4+ years of dedicated artistry. Sacred Qur\'anic verses and monograms crafted with traditional bamboo pens, soot ink, and 24K pure gold leaf on aged archival sheets.',
       icon: Feather,
-      metric: '৪+ বছরের শাস্ত্রীয় অভিজ্ঞতা',
-      badge: 'শাস্ত্রীয় চারুলিপি',
-      color: 'text-amber-600 bg-amber-50 border-amber-200',
-      actionText: 'ক্যালিগ্রাফি গ্যালারি দেখুন',
+      metric: '4+ Years Classical Practice',
+      badge: 'Sacred Artistry',
+      actionText: 'Explore Calligraphy Gallery',
     },
     {
       id: 'graphic-design',
-      title: ui.graphicDesign,
-      subtitle: 'ব্র্যান্ডিং, সোশ্যাল মিডিয়া ও পোস্টার',
-      desc: 'আস-সুন্নাহ স্কিল ডেভেলপমেন্ট ইনস্টিটিউট থেকে প্রশিক্ষণপ্রাপ্ত। আন্তর্জাতিক মানের লোগো, ব্র্যান্ড আইডেন্টিটি, ব্যানার ও হাই-কনভার্টিং সোশ্যাল মিডিয়া গ্রাফিক্স।',
+      title: 'Graphic Design',
+      subtitle: 'Brand Identity, Social Media & Print',
+      desc: 'Graduate of As-Sunnah Skill Development Institute. Bespoke brand identity systems, high-CTR social media ad creatives, thumbnails, packaging, and marketing collateral.',
       icon: Palette,
-      metric: 'আস-সুন্নাহ ইনস্টিটিউট সার্টিফাইড',
-      badge: 'ব্র্যান্ড ডিজাইন',
-      color: 'text-emerald-700 bg-emerald-50 border-emerald-200',
-      actionText: 'ডিজাইন পোর্টফোলিও দেখুন',
+      metric: 'As-Sunnah Institute Certified',
+      badge: 'Brand Systems',
+      actionText: 'View Design Portfolio',
     },
     {
       id: 'video-editing',
-      title: ui.videoEditing,
-      subtitle: 'সিনেমাটিক কাটস ও ভাইরাল রিলস',
-      desc: 'ইউটিউব, ফেসবুক ও ইনস্টাগ্রামের জন্য হাই-রিটেনশন ভিডিও এডিটিং, সাউন্ড ডিজাইন, কালার গ্রেডিং ও আকর্ষক মোশন গ্রাফিক্স।',
+      title: 'Video Editing',
+      subtitle: 'Cinematic Cuts & High-Retention Reels',
+      desc: 'High-retention rhythmic video editing, sound design, color grading, and viral short-form reels for YouTube, Facebook, and Instagram.',
       icon: Video,
-      metric: 'প্রিমিয়ার প্রো ও দাভিঞ্চি রিজলভ',
-      badge: 'মোশন ও ভিডিও',
-      color: 'text-teal-700 bg-teal-50 border-teal-200',
-      actionText: 'ভিডিও প্রজেক্ট দেখুন',
+      metric: 'Premiere Pro & DaVinci Resolve',
+      badge: 'Motion & Reels',
+      actionText: 'Watch Video Projects',
     },
     {
       id: 'meta-marketing',
-      title: ui.metaMarketing,
-      subtitle: 'টার্গেটেড মেটা অ্যাডস ও সেলস গ্রোথ',
-      desc: 'ফেসবুক ও ইনস্টাগ্রাম বিজ্ঞাপনে নিখুঁত অডিয়েন্স টার্গেটিং, ফানেল স্ট্র্যাটেজি ও হাই ROAS নিশ্চিত করে ব্যবসার বিক্রয় বৃদ্ধি।',
+      title: 'Meta Marketing',
+      subtitle: 'Targeted Meta Ads & Sales Scaling',
+      desc: 'Data-driven Facebook and Instagram ad management. Precise audience targeting, full-funnel creative testing, and ROAS scaling for commercial brands.',
       icon: TrendingUp,
-      metric: 'উচ্চ ROAS ও ডেটা-ড্রিভেন সেলস',
-      badge: 'মেটা অ্যাডস এক্সপার্ট',
-      color: 'text-green-800 bg-green-50 border-green-200',
-      actionText: 'মার্কেটিং ফলাফল দেখুন',
+      metric: 'High ROAS & Conversion Scaling',
+      badge: 'Meta Ads Specialist',
+      actionText: 'View Marketing Results',
     },
   ];
 
-  // Certifications / Accreditations (Matching As-Sunnah Foundation's approval/sanad section)
+  // Certifications / Accreditations (Matching As-Sunnah Foundation's institutional credentials)
   const certifications = [
     {
-      title: 'আস-সুন্নাহ স্কিল ডেভেলপমেন্ট ইনস্টিটিউট',
-      englishTitle: 'As-Sunnah Skill Development Institute',
-      subtitle: 'গ্রাফিক্স ডিজাইন, ভিডিও এডিটিং ও মেটা মার্কেটিং',
-      duration: 'সাড়ে ৩ মাসের পেশাদার প্রশিক্ষণ সম্পন্ন',
-      status: 'ভেরিফায়েড প্রফেশনাল গ্রাজুয়েট',
+      title: 'As-Sunnah Skill Development Institute',
+      subtitle: 'Graphic Design, Video Editing & Meta Marketing',
+      duration: '3.5 Months Professional Training Completed',
+      status: 'Verified Professional Graduate',
       icon: Award,
       badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300',
     },
     {
-      title: 'জামিয়া আরাবিয়া আশরাফুল উলূম কুষ্টিয়া',
-      englishTitle: 'Jamia Arabia Ashraful Ulum Kushtia',
-      subtitle: 'দাওরায়ে হাদিস (মাস্টার্স সমমান)',
-      duration: 'ফলাফল: জায়্যিদ জিদ্দান (Jayyid Jiddan)',
-      status: 'সনদপ্রাপ্ত আলিম ও ইসলামিক স্কলার',
+      title: 'Jamia Arabia Ashraful Ulum, Kushtia',
+      subtitle: 'Dawra-e-Hadith (Masters Equivalent)',
+      duration: 'Academic Distinction: Jayyid Jiddan (Very Good)',
+      status: 'Certified Islamic Scholar (Sanad)',
       icon: BookOpen,
       badgeColor: 'bg-amber-100 text-amber-900 border-amber-300',
     },
     {
-      title: 'বাংলাদেশ মাদ্রাসা শিক্ষা বোর্ড',
-      englishTitle: 'Bangladesh Madrasah Education Board',
-      subtitle: 'দাখিল পরীক্ষা ২০২৬ (জিপিএ ৪.৬৩)',
-      duration: 'আলিম শ্রেণি (উচ্চমাধ্যমিক সমমান) অধ্যয়নরত',
-      status: 'মেধাবী প্রাতিষ্ঠানিক ফলাফল',
+      title: 'Bangladesh Madrasah Education Board',
+      subtitle: 'Dakhil Examination 2026 (GPA 4.63)',
+      duration: 'Alim Studies (Higher Secondary) Currently In Progress',
+      status: 'Merit Academic Standing',
       icon: GraduationCap,
       badgeColor: 'bg-blue-100 text-blue-900 border-blue-300',
     },
     {
-      title: 'আরবি ক্যালিগ্রাফি শিল্পশালা',
-      englishTitle: 'Traditional Arabic Calligraphy Artistry',
-      subtitle: 'শাস্ত্রীয় থুলুথ, নাসখ, দিওয়ানি ও রুকাহ লিপি',
-      duration: '৪+ বছরের নিরবচ্ছিন্ন শিল্পসাধনা',
-      status: 'ঐতিহ্যবাহী ক্যালিগ্রাফি প্র্যাকটিস',
+      title: 'Sacred Arabic Calligraphy Artistry',
+      subtitle: 'Thuluth, Naskh, Diwani & Ruq\'ah Scripts',
+      duration: '4+ Years Dedicated Classical Mastery',
+      status: 'Traditional Calligraphic Mastery',
       icon: Feather,
       badgeColor: 'bg-purple-100 text-purple-900 border-purple-300',
     },
@@ -160,20 +151,29 @@ export const HomePage: React.FC<HomePageProps> = ({
   const handleQuickSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const serviceLabels = {
-      calligraphy: 'আরবি ক্যালিগ্রাফি কমিশন',
-      design: 'গ্রাফিক্স ডিজাইন ও ব্র্যান্ডিং',
-      video: 'ভিডিও এডিটিং ও রিলস',
-      marketing: 'মেটা মার্কেটিং ও ফেসবুক বিজ্ঞাপন',
+      calligraphy: 'Arabic Calligraphy Commission',
+      design: 'Graphic Design & Brand Identity',
+      video: 'Video Editing & Motion Reels',
+      marketing: 'Meta Marketing & Targeted Ads',
     };
-    const msg = `আসসালামু আলাইকুম, আমি ${serviceLabels[selectedService]} সংক্রান্ত কাজের বিষয়ে আলোচনা করতে চাই।${
-      quickNotes ? ` বিস্তারিত: ${quickNotes}` : ''
+    const msg = `Hello, I would like to discuss a project regarding ${serviceLabels[selectedService]}.${
+      quickNotes ? ` Project details: ${quickNotes}` : ''
     }`;
-    onOpenInquiry(selectedService === 'calligraphy' ? 'arabic_calligraphy' : selectedService === 'design' ? 'graphic_design' : selectedService === 'video' ? 'video_editing' : 'meta_marketing', msg);
+    onOpenInquiry(
+      selectedService === 'calligraphy'
+        ? 'arabic_calligraphy'
+        : selectedService === 'design'
+        ? 'graphic_design'
+        : selectedService === 'video'
+        ? 'video_editing'
+        : 'meta_marketing',
+      msg
+    );
   };
 
   return (
     <div className="space-y-16 pb-20 bg-[#f8fafc] text-slate-800">
-      {/* 1. HERO SECTION (As-Sunnah Foundation Style: Crisp White Canvas, Emerald Green Brand, Gold Accents, Interactive Quick Inquiry Card) */}
+      {/* 1. HERO SECTION (Smart As-Sunnah Style: Crisp White Canvas, Emerald Green Brand, Gold Accents, Interactive Quick Inquiry Card) */}
       <section className="relative pt-6 sm:pt-10 pb-12 bg-gradient-to-b from-emerald-50/60 via-white to-[#f8fafc] border-b border-emerald-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
@@ -188,15 +188,15 @@ export const HomePage: React.FC<HomePageProps> = ({
             {/* Left Column: Typographic & Profile Showcase */}
             <div className="lg:col-span-7 space-y-6">
               
-              {/* As-Sunnah Pill Badge */}
+              {/* As-Sunnah Pill Badges */}
               <div className="flex flex-wrap items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#006a4e] text-white text-xs font-semibold shadow-xs">
                   <ShieldCheck className="w-3.5 h-3.5" />
-                  <span>আস-সুন্নাহ ফাউন্ডেশন ইনস্টিটিউট প্রশিক্ষিত</span>
+                  <span>As-Sunnah Foundation Institute Trained</span>
                 </span>
                 <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-amber-100 text-amber-900 border border-amber-300 text-xs font-medium">
                   <MapPin className="w-3.5 h-3.5 text-amber-700" />
-                  <span>ঢাকা, বাংলাদেশ (কুষ্টিয়া)</span>
+                  <span>Dhaka, Bangladesh · Orig. Kushtia</span>
                 </span>
               </div>
 
@@ -222,7 +222,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   className="px-6 py-3.5 text-xs sm:text-sm font-bold text-white bg-[#006a4e] hover:bg-[#00543c] rounded-xl transition-all shadow-md shadow-emerald-900/10 active:scale-95 flex items-center gap-2"
                 >
                   <Send className="w-4 h-4" />
-                  <span>কাজের জন্য যোগাযোগ করুন</span>
+                  <span>Hire Me / Get In Touch</span>
                 </button>
 
                 <button
@@ -230,16 +230,15 @@ export const HomePage: React.FC<HomePageProps> = ({
                   className="px-5 py-3.5 text-xs sm:text-sm font-semibold text-[#006a4e] hover:text-white bg-emerald-50 hover:bg-[#006a4e] border border-emerald-300 rounded-xl transition-all flex items-center gap-2"
                 >
                   <Feather className="w-4 h-4" />
-                  <span>ক্যালিগ্রাফি শিল্পকর্ম</span>
+                  <span>View Calligraphy Gallery</span>
                 </button>
 
                 <button
-                  onClick={() => onNavigate('admin')}
-                  className="px-4 py-3.5 text-xs sm:text-sm font-bold text-slate-900 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all shadow-xs flex items-center gap-2"
-                  title="অ্যাডমিন প্যানেলে সরাসরি সংশোধন করুন"
+                  onClick={() => onNavigate('about')}
+                  className="px-5 py-3.5 text-xs sm:text-sm font-semibold text-slate-700 hover:text-slate-900 bg-white hover:bg-slate-50 border border-slate-300 rounded-xl transition-all flex items-center gap-2 shadow-xs"
                 >
-                  <Camera className="w-4 h-4" />
-                  <span>অ্যাডমিন এডিটর (/admin)</span>
+                  <BookOpen className="w-4 h-4 text-emerald-700" />
+                  <span>About &amp; Credentials</span>
                 </button>
               </div>
 
@@ -247,15 +246,15 @@ export const HomePage: React.FC<HomePageProps> = ({
               <div className="pt-4 flex flex-wrap items-center gap-6 text-xs text-slate-600 border-t border-slate-200">
                 <div className="flex items-center gap-1.5">
                   <CheckCircle className="w-4 h-4 text-[#006a4e]" />
-                  <span>১০০% সময়নিষ্ঠ ডেলিভারি</span>
+                  <span>100% On-Time Delivery</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <CheckCircle className="w-4 h-4 text-[#006a4e]" />
-                  <span>ইসলামিক ও আধুনিক নন্দনতত্ত্ব</span>
+                  <span>Classical &amp; Modern Aesthetics</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <CheckCircle className="w-4 h-4 text-[#006a4e]" />
-                  <span>সরাসরি সংশোধন ও কাস্টমাইজেশন</span>
+                  <span>Direct Communication</span>
                 </div>
               </div>
             </div>
@@ -268,10 +267,10 @@ export const HomePage: React.FC<HomePageProps> = ({
                   <div className="flex items-center justify-between">
                     <div>
                       <span className="text-xs uppercase tracking-wider text-emerald-200 font-semibold block">
-                        দ্রুত সেবা নির্বাচন ও আলোচনা
+                        Quick Service Inquiry
                       </span>
                       <h3 className="text-lg font-bold font-display">
-                        সরাসরি প্রজেক্ট বুকিং ও পরামর্শ
+                        Start a Project / Consultation
                       </h3>
                     </div>
                     <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-amber-300">
@@ -284,14 +283,14 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <form onSubmit={handleQuickSubmit} className="p-6 space-y-4">
                   <div>
                     <label className="block text-xs font-semibold text-slate-700 mb-2">
-                      ১. আপনার কাঙ্ক্ষিত সেবা বেছে নিন:
+                      1. Select Your Desired Discipline:
                     </label>
                     <div className="grid grid-cols-2 gap-2 text-xs">
                       {[
-                        { id: 'design', label: 'গ্রাফিক্স ডিজাইন', icon: Palette },
-                        { id: 'calligraphy', label: 'আরবি ক্যালিগ্রাফি', icon: Feather },
-                        { id: 'video', label: 'ভিডিও এডিটিং', icon: Video },
-                        { id: 'marketing', label: 'মেটা মার্কেটিং', icon: TrendingUp },
+                        { id: 'design', label: 'Graphic Design', icon: Palette },
+                        { id: 'calligraphy', label: 'Calligraphy', icon: Feather },
+                        { id: 'video', label: 'Video Editing', icon: Video },
+                        { id: 'marketing', label: 'Meta Marketing', icon: TrendingUp },
                       ].map((item) => {
                         const Icon = item.icon;
                         const isSelected = selectedService === item.id;
@@ -316,14 +315,14 @@ export const HomePage: React.FC<HomePageProps> = ({
 
                   <div>
                     <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      ২. কাজের সংক্ষেপ বা মেসেজ (ঐচ্ছিক):
+                      2. Brief Project Scope (Optional):
                     </label>
                     <textarea
                       value={quickNotes}
                       onChange={(e) => setQuickNotes(e.target.value)}
                       rows={2}
-                      placeholder="লোগো, ক্যালিগ্রাফি সাইজ বা ক্যাম্পেইনের লক্ষ্য লিখুন..."
-                      className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#006a4e] focus:border-transparent bg-slate-50"
+                      placeholder="E.g., Brand logo, Calligraphy artwork size, or Meta ad objective..."
+                      className="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-[#006a4e] focus:border-transparent bg-slate-50 text-slate-800"
                     />
                   </div>
 
@@ -331,11 +330,11 @@ export const HomePage: React.FC<HomePageProps> = ({
                     type="submit"
                     className="w-full py-3 px-4 bg-[#006a4e] hover:bg-[#00543c] text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-md flex items-center justify-center gap-2"
                   >
-                    <span>আলোচনা শুরু করুন &rarr;</span>
+                    <span>Send Project Inquiry &rarr;</span>
                   </button>
 
-                  <div className="pt-2 text-center text-[11px] text-slate-500">
-                    <span>সরাসরি হোয়াটসঅ্যাপ বা ইনবক্সে যোগাযোগ করা হবে</span>
+                  <div className="pt-1 text-center text-[11px] text-slate-500">
+                    <span>Direct response via WhatsApp or Email within 24 hours</span>
                   </div>
                 </form>
               </div>
@@ -345,27 +344,27 @@ export const HomePage: React.FC<HomePageProps> = ({
           {/* Full-width Metric Strip below Hero */}
           <div className="mt-12 pt-8 border-t border-slate-200 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 text-left">
             <div className="p-4 rounded-xl bg-white border border-slate-200/80 shadow-xs">
-              <span className="block text-2xl font-bold font-display text-[#006a4e] tabular-nums">৪+ বছর</span>
-              <span className="text-xs text-slate-600 font-medium">আরবি ক্যালিগ্রাফি সাধনা</span>
+              <span className="block text-2xl font-bold font-display text-[#006a4e] tabular-nums">4+ Years</span>
+              <span className="text-xs text-slate-600 font-medium">Sacred Arabic Calligraphy</span>
             </div>
             <div className="p-4 rounded-xl bg-white border border-slate-200/80 shadow-xs">
-              <span className="block text-2xl font-bold font-display text-[#006a4e] tabular-nums">৩.৫ মাস</span>
-              <span className="text-xs text-slate-600 font-medium">আস-সুন্নাহ ইনস্টিটিউট প্রশিক্ষণ</span>
+              <span className="block text-2xl font-bold font-display text-[#006a4e] tabular-nums">3.5 Months</span>
+              <span className="text-xs text-slate-600 font-medium">As-Sunnah Institute Training</span>
             </div>
             <div className="p-4 rounded-xl bg-white border border-slate-200/80 shadow-xs">
-              <span className="block text-2xl font-bold font-display text-amber-600 font-semibold">জায়্যিদ জিদ্দান</span>
-              <span className="text-xs text-slate-600 font-medium">দাওরায়ে হাদিস (কুষ্টিয়া)</span>
+              <span className="block text-2xl font-bold font-display text-amber-600 font-semibold">Jayyid Jiddan</span>
+              <span className="text-xs text-slate-600 font-medium">Dawra-e-Hadith (Kushtia)</span>
             </div>
             <div className="p-4 rounded-xl bg-white border border-slate-200/80 shadow-xs">
-              <span className="block text-2xl font-bold font-display text-[#006a4e] tabular-nums">জিপিএ ৪.৬৩</span>
-              <span className="text-xs text-slate-600 font-medium">দাখিল ২০২৬ · আলিম অধ্যয়নরত</span>
+              <span className="block text-2xl font-bold font-display text-[#006a4e] tabular-nums">GPA 4.63</span>
+              <span className="text-xs text-slate-600 font-medium">Dakhil 2026 · Alim In Progress</span>
             </div>
           </div>
 
         </div>
       </section>
 
-      {/* 2. REVIEWS & TESTIMONIALS (EXPLICIT USER REQUEST: "শুরুর দিকে হোমে যেন আমার রিভিউ বা এই টাইপের কিছু থাকে") */}
+      {/* 2. REVIEWS & TESTIMONIALS (PLACED RIGHT AT THE TOP OF HOMEPAGE) */}
       {theme.homepageSections.testimonials && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="p-6 sm:p-8 rounded-3xl bg-white border-2 border-emerald-500/20 shadow-md">
@@ -375,26 +374,26 @@ export const HomePage: React.FC<HomePageProps> = ({
               <div>
                 <div className="flex items-center gap-2 text-xs font-bold text-[#006a4e] uppercase tracking-wider mb-1">
                   <Star className="w-4 h-4 fill-amber-400 text-amber-500" />
-                  <span>ক্লায়েন্টদের সন্তুষ্টি ও মতামত</span>
+                  <span>Client Satisfaction &amp; Verified Trust</span>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-bold font-display text-slate-900 tracking-tight">
-                  রিভিউ ও ক্লায়েন্টদের মূল্যায়ন
+                  Client Reviews &amp; Testimonials
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-600 mt-1">
-                  আমার গ্রাফিক্স ডিজাইন, ক্যালিগ্রাফি এবং মেটা মার্কেটিং সেবার বিষয়ে ক্লায়েন্টদের প্রত্যক্ষ অভিজ্ঞতা ও মন্তব্য।
+                  Verified endorsements and real client feedback on graphic design, calligraphy commissions, and Meta campaigns.
                 </p>
               </div>
 
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1.5 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-xs font-bold">
                   <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                  <span>৫.০ স্টার রেটিং</span>
+                  <span>5.0 Star Rating</span>
                 </div>
                 <button
-                  onClick={() => onOpenInquiry('review', 'আমি একটি ক্লায়েন্ট রিভিউ ও ফিডব্যাক দিতে চাই।')}
+                  onClick={() => onOpenInquiry('review', 'I would like to submit client review feedback.')}
                   className="px-4 py-2 text-xs font-bold text-white bg-[#006a4e] hover:bg-[#00543c] rounded-xl transition-all shadow-xs"
                 >
-                  + আপনার রিভিউ দিন
+                  + Add Your Review
                 </button>
               </div>
             </div>
@@ -417,7 +416,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                       {test.verified && (
                         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-semibold">
                           <CheckCircle className="w-3 h-3 text-[#006a4e]" />
-                          ভেরিফায়েড ক্লায়েন্ট
+                          Verified Client
                         </span>
                       )}
                     </div>
@@ -437,7 +436,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                       </span>
                     </div>
                     <span className="text-[10px] text-slate-400 font-mono">
-                      {test.projectType || 'ভেরিফায়েড ক্লায়েন্ট'}
+                      {test.projectType || 'Verified Client'}
                     </span>
                   </div>
                 </div>
@@ -447,20 +446,20 @@ export const HomePage: React.FC<HomePageProps> = ({
             {/* Trust Badges Bar */}
             <div className="mt-8 pt-6 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
               <div className="p-3 bg-emerald-50/60 rounded-xl border border-emerald-100">
-                <span className="text-xl font-bold font-display text-[#006a4e]">১০০+</span>
-                <span className="text-[11px] text-slate-600 block mt-0.5">সন্তুষ্ট ক্লায়েন্ট ও ক্রেতা</span>
+                <span className="text-xl font-bold font-display text-[#006a4e]">100+</span>
+                <span className="text-[11px] text-slate-600 block mt-0.5">Satisfied Clients</span>
               </div>
               <div className="p-3 bg-emerald-50/60 rounded-xl border border-emerald-100">
-                <span className="text-xl font-bold font-display text-[#006a4e]">১০০%</span>
-                <span className="text-[11px] text-slate-600 block mt-0.5">অন-টাইম প্রজেক্ট ডেলিভারি</span>
+                <span className="text-xl font-bold font-display text-[#006a4e]">100%</span>
+                <span className="text-[11px] text-slate-600 block mt-0.5">On-Time Delivery</span>
               </div>
               <div className="p-3 bg-emerald-50/60 rounded-xl border border-emerald-100">
-                <span className="text-xl font-bold font-display text-[#006a4e]">৪+ বছর</span>
-                <span className="text-[11px] text-slate-600 block mt-0.5">শিল্পচর্চার অভিজ্ঞতা</span>
+                <span className="text-xl font-bold font-display text-[#006a4e]">4+ Years</span>
+                <span className="text-[11px] text-slate-600 block mt-0.5">Artistry &amp; Design Practice</span>
               </div>
               <div className="p-3 bg-emerald-50/60 rounded-xl border border-emerald-100">
-                <span className="text-xl font-bold font-display text-[#006a4e]">২৪/৭</span>
-                <span className="text-[11px] text-slate-600 block mt-0.5">সরাসরি সাপোর্ট ও পরামর্শ</span>
+                <span className="text-xl font-bold font-display text-[#006a4e]">24/7</span>
+                <span className="text-[11px] text-slate-600 block mt-0.5">Dedicated Communication</span>
               </div>
             </div>
 
@@ -468,18 +467,18 @@ export const HomePage: React.FC<HomePageProps> = ({
         </section>
       )}
 
-      {/* 3. CERTIFICATIONS & ACCREDITATIONS (Matching As-Sunnah Foundation's approval/sanad section from video 00:10-00:12) */}
+      {/* 3. CERTIFICATIONS & ACCREDITATIONS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
           <div className="flex items-center gap-2 text-xs font-bold text-[#006a4e] uppercase tracking-wider mb-1">
             <Award className="w-4 h-4 text-[#006a4e]" />
-            <span>সনদপত্র, অনুমোদন ও শিক্ষাগত যোগ্যতা</span>
+            <span>Credentials, Diplomas &amp; Academic Honors</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-bold font-display text-slate-900 tracking-tight">
-            প্রফেশনাল সার্টিফিকেশন ও প্রাতিষ্ঠানিক ডিগ্রি
+            Institutional Certifications &amp; Degrees
           </h2>
           <p className="text-xs sm:text-sm text-slate-600 mt-1">
-            আস-সুন্নাহ স্কিল ডেভেলপমেন্ট ইনস্টিটিউট ও জামিয়া আরাবিয়া আশরাফুল উলূম কুষ্টিয়া থেকে অর্জিত সত্যায়িত যোগ্যতা।
+            Verified academic qualifications from Jamia Arabia Ashraful Ulum Kushtia and professional skill training from As-Sunnah Skill Development Institute.
           </p>
         </div>
 
@@ -502,9 +501,6 @@ export const HomePage: React.FC<HomePageProps> = ({
                     <h3 className="text-sm font-bold font-display text-slate-900 leading-snug">
                       {cert.title}
                     </h3>
-                    <p className="text-xs text-slate-500 font-medium mt-0.5">
-                      {cert.englishTitle}
-                    </p>
                   </div>
                   <p className="text-xs font-semibold text-[#006a4e]">
                     {cert.subtitle}
@@ -515,7 +511,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                 </div>
 
                 <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-[#006a4e] font-semibold">
-                  <span>সত্যায়িত রেকর্ড</span>
+                  <span>Verified Record</span>
                   <CheckCircle className="w-3.5 h-3.5" />
                 </div>
               </div>
@@ -524,15 +520,15 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </section>
 
-      {/* 4. FOUR DISCIPLINE PORTAL CARDS (As-Sunnah Foundation Clean White Cards) */}
+      {/* 4. FOUR DISCIPLINE PORTAL CARDS */}
       {theme.homepageSections.quickNav && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-6">
             <h2 className="text-2xl sm:text-3xl font-bold font-display text-slate-900 tracking-tight">
-              আমার চারটি প্রধান কর্মক্ষেত্র
+              My Four Core Disciplines
             </h2>
             <p className="text-xs sm:text-sm text-slate-600 mt-1">
-              যেকোনো বিভাগে ক্লিক করে কাজের বিস্তারিত গ্যালারি, প্রজেক্ট এবং কেস স্টাডি দেখুন।
+              Select any field to view specialized portfolios, case studies, and curated projects.
             </p>
           </div>
 
@@ -574,36 +570,26 @@ export const HomePage: React.FC<HomePageProps> = ({
         </section>
       )}
 
-      {/* 5. FEATURED ARABIC CALLIGRAPHY SHOWCASE (With prominent Add Photo / View options) */}
+      {/* 5. FEATURED ARABIC CALLIGRAPHY SHOWCASE */}
       {theme.homepageSections.featuredCalligraphy && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-6 gap-4">
             <div>
               <div className="flex items-center gap-2 text-xs font-bold text-amber-700 uppercase tracking-wider mb-1">
                 <Feather className="w-4 h-4 text-amber-600" />
-                <span>আরবি চারুলিপি প্রদর্শনী</span>
+                <span>Sacred Letterforms &amp; Illumination</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold font-display text-slate-900 tracking-tight">
                 {ui.featuredArtworks}
               </h2>
             </div>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => onNavigate('admin')}
-                className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-emerald-50 text-[#006a4e] border border-emerald-200 hover:bg-emerald-100 flex items-center gap-1.5"
-                title="অ্যাডমিন থেকে ছবি যুক্ত করুন"
-              >
-                <Camera className="w-3.5 h-3.5" />
-                <span>+ অ্যাড ফটো / ছবি আপলোড</span>
-              </button>
-              <button
-                onClick={() => onNavigate('arabic-calligraphy')}
-                className="text-xs font-bold text-[#006a4e] hover:text-[#00543c] flex items-center gap-1.5"
-              >
-                <span>সব শিল্পকর্ম দেখুন</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
+            <button
+              onClick={() => onNavigate('arabic-calligraphy')}
+              className="text-xs font-bold text-[#006a4e] hover:text-[#00543c] flex items-center gap-1.5"
+            >
+              <span>View All Artworks</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -633,11 +619,11 @@ export const HomePage: React.FC<HomePageProps> = ({
                     className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
                   />
                   <div className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/75 backdrop-blur-sm text-[11px] font-semibold text-amber-300 border border-amber-500/30">
-                    {art.scriptStyle} লিপি
+                    {art.scriptStyle} Script
                   </div>
                   {art.forSale && (
                     <div className="absolute top-3 right-3 px-2 py-0.5 rounded-md bg-[#006a4e] text-white text-[10px] font-bold">
-                      সংগ্রহযোগ্য
+                      Original Available
                     </div>
                   )}
                 </div>
@@ -656,9 +642,9 @@ export const HomePage: React.FC<HomePageProps> = ({
                   </div>
 
                   <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-                    <span>{art.dimensions || 'ঐতিহ্যবাহী কাগজ ও কালি'}</span>
+                    <span>{art.dimensions || 'Handmade Paper & Soot Ink'}</span>
                     <span className="text-[#006a4e] font-bold group-hover:underline flex items-center gap-1">
-                      বড় করে দেখুন &rarr;
+                      Preview &rarr;
                     </span>
                   </div>
                 </div>
@@ -675,7 +661,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             <div>
               <div className="flex items-center gap-2 text-xs font-bold text-[#006a4e] uppercase tracking-wider mb-1">
                 <Palette className="w-4 h-4 text-[#006a4e]" />
-                <span>গ্রাফিক্স ডিজাইন ও ব্র্যান্ড আইডেন্টিটি</span>
+                <span>Visual Identity &amp; High-CTR Graphics</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold font-display text-slate-900 tracking-tight">
                 {ui.graphicDesign}
@@ -685,7 +671,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               onClick={() => onNavigate('graphic-design')}
               className="text-xs font-bold text-[#006a4e] hover:text-[#00543c] flex items-center gap-1.5 self-start sm:self-auto"
             >
-              <span>সকল ডিজাইন প্রজেক্ট</span>
+              <span>View All Design Projects</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -720,9 +706,9 @@ export const HomePage: React.FC<HomePageProps> = ({
 
                 <div className="p-6 space-y-2">
                   <div className="flex items-center gap-2 text-xs text-slate-500">
-                    <span className="font-semibold text-[#006a4e]">{proj.client || 'ক্লায়েন্ট প্রজেক্ট'}</span>
+                    <span className="font-semibold text-[#006a4e]">{proj.client || 'Client Project'}</span>
                     <span aria-hidden="true">·</span>
-                    <span>{proj.completionDate || '২০২৬'}</span>
+                    <span>{proj.completionDate || '2026'}</span>
                   </div>
                   <h3 className="text-lg font-bold font-display text-slate-900 group-hover:text-[#006a4e] transition-colors">
                     {t(proj.title)}
@@ -744,7 +730,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             <div>
               <div className="flex items-center gap-2 text-xs font-bold text-teal-700 uppercase tracking-wider mb-1">
                 <Video className="w-4 h-4 text-teal-600" />
-                <span>ভিডিও এডিটিং ও সিনেমাটিক রিলস</span>
+                <span>Cinematic Editing &amp; Viral Reels</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-bold font-display text-slate-900 tracking-tight">
                 {ui.videoEditing}
@@ -754,7 +740,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               onClick={() => onNavigate('video-editing')}
               className="text-xs font-bold text-[#006a4e] hover:text-[#00543c] flex items-center gap-1.5 self-start sm:self-auto"
             >
-              <span>সকল ভিডিও দেখুন</span>
+              <span>View All Videos</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -815,13 +801,13 @@ export const HomePage: React.FC<HomePageProps> = ({
             <div className="max-w-3xl space-y-4 mb-8">
               <div className="flex items-center gap-2 text-xs font-bold text-emerald-200 uppercase tracking-wider">
                 <TrendingUp className="w-4 h-4 text-emerald-300" />
-                <span>মেটা মার্কেটিং ও ক্যাম্পেইন গ্রোথ</span>
+                <span>Meta Ads Growth Strategy</span>
               </div>
               <h2 className="text-2xl sm:text-4xl font-bold font-display tracking-tight">
-                ডেটা-ড্রিভেন সামাজিক যোগাযোগ বিজ্ঞাপন ও উচ্চ বিক্রয়
+                Data-Driven Social Acquisition &amp; High ROAS
               </h2>
               <p className="text-xs sm:text-sm text-emerald-100 leading-relaxed">
-                আস-সুন্নাহ স্কিল ডেভেলপমেন্ট ইনস্টিটিউট থেকে প্রশিক্ষিত মেটা মার্কেটিং দক্ষতায় পরিচালিত প্রচারণা। নিখুঁত টার্গেটিং, রিটার্গেটিং ও ফানেল অপ্টিমাইজেশন।
+                Trained at As-Sunnah Skill Development Institute, I build full-funnel ad architectures (Awareness, Retargeting, Catalog Sales) designed to eliminate ad spend waste and accelerate e-commerce revenue.
               </p>
             </div>
 
@@ -830,7 +816,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               <div className="p-6 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 space-y-6">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/20 pb-4">
                   <div>
-                    <span className="text-xs text-emerald-200 font-mono">ক্লায়েন্ট: {marketingCases[0].client}</span>
+                    <span className="text-xs text-emerald-200 font-mono">CLIENT: {marketingCases[0].client}</span>
                     <h3 className="text-lg font-bold text-white mt-0.5">
                       {t(marketingCases[0].title)}
                     </h3>
@@ -839,7 +825,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                     onClick={() => onNavigate('meta-marketing')}
                     className="text-xs font-bold text-amber-300 hover:underline flex items-center gap-1 self-start sm:self-auto"
                   >
-                    <span>সম্পূর্ণ কেস স্টাডি দেখুন</span>
+                    <span>Full Case Study</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -862,21 +848,21 @@ export const HomePage: React.FC<HomePageProps> = ({
         </section>
       )}
 
-      {/* 9. AS-SUNNAH FOUNDATION STYLE BANNER / CONTACT SECTION */}
+      {/* 9. CONTACT CTA BANNER */}
       {theme.homepageSections.contactCta && (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="p-8 sm:p-12 rounded-3xl bg-white border-2 border-[#006a4e] shadow-xl text-center space-y-6">
             <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-100 text-[#006a4e] text-xs font-bold">
               <Sparkles className="w-4 h-4" />
-              <span>সরাসরি নতুন কাজ শুরু করুন</span>
+              <span>Available for Commercial Commissions &amp; Contracts</span>
             </span>
 
             <h2 className="text-2xl sm:text-4xl font-bold font-display text-slate-900 tracking-tight max-w-2xl mx-auto">
-              আপনার প্রতিষ্ঠানের জন্য আকর্ষণীয় ডিজাইন, ক্যালিগ্রাফি বা বিজ্ঞাপনী সেবা চান?
+              Ready to elevate your brand with distinguished design, calligraphy, or video?
             </h2>
 
             <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto leading-relaxed">
-              আরবি ক্যালিগ্রাফি কমিশন, ব্র্যান্ডিং, ভিডিও এডিটিং কিংবা ফেসবুক/ইনস্টাগ্রাম মার্কেটিং ক্যাম্পেইনের জন্য আজই যোগাযোগ করুন।
+              Available for Arabic calligraphy commissions, brand identity systems, video editing contracts, and Meta advertising management.
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
@@ -893,14 +879,6 @@ export const HomePage: React.FC<HomePageProps> = ({
                 className="px-6 py-3.5 text-xs sm:text-sm font-semibold text-[#006a4e] hover:bg-emerald-50 border border-emerald-300 rounded-xl transition-all"
               >
                 <span>{ui.allLinks}</span>
-              </button>
-
-              <button
-                onClick={() => onNavigate('admin')}
-                className="px-6 py-3.5 text-xs sm:text-sm font-bold text-slate-900 bg-amber-400 hover:bg-amber-300 rounded-xl transition-all shadow-sm flex items-center gap-2"
-              >
-                <Camera className="w-4 h-4" />
-                <span>অ্যাডমিন ড্যাশবোর্ড / ফটো এডিটর</span>
               </button>
             </div>
           </div>
